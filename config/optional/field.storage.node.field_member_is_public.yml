@@ -1,0 +1,20 @@
+uuid: 6a35b4e5-41f4-47f4-a639-0825e237be5a
+langcode: de
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: re1Od4aEuzD7TUrv2h-GA48QSvvmJk3c3TfglAU1Ph4
+id: node.field_member_is_public
+field_name: field_member_is_public
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

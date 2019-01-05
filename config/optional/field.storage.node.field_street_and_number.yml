@@ -1,0 +1,21 @@
+uuid: 815d80a4-a01f-43f0-b478-90b1003179a5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_street_and_number
+field_name: field_street_and_number
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
