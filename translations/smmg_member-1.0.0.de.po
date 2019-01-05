@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2019-01-05 15:31+0100\n"
-"PO-Revision-Date: 2019-01-05 15:32+0100\n"
+"PO-Revision-Date: 2019-01-05 23:53+0100\n"
 "Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: t\n"
@@ -52,8 +52,7 @@ msgstr "Email: An (sale@example.com, info@example.com)"
 msgid "Testmode: Don't send email to Subscriber"
 msgstr "Testmodus: Es werden keine E-Mails an Abonnenten versendet"
 
-#: src/Form/MemberSettingsForm.php:102
-#: src/Form/MemberSettingsForm.php:130
+#: src/Form/MemberSettingsForm.php:102 src/Form/MemberSettingsForm.php:130
 msgid "Templates"
 msgstr "Vorlagen"
 
@@ -94,7 +93,7 @@ msgstr ""
 
 #: src/Form/SubscribeForm.php:117
 msgid "Gender"
-msgstr "Titel"
+msgstr "Anrede"
 
 #: src/Form/SubscribeForm.php:128
 msgid "First Name"
