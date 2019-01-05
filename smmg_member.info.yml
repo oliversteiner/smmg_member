@@ -1,0 +1,15 @@
+name: 'Small Messages - Member'
+type: module
+description: 'Member Plugin for Small Messages'
+core: 8.x
+package: 'Messages'
+dependencies:
+  - drupal:node
+  - small_messages
+  - honeypot
+
+path: modules
+project: smmg_member
+version: 1.0.0
+'interface translation project': smmg_member
+'interface translation server pattern': %path/%project/translations/%project-%version.%language.po

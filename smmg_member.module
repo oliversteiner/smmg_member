@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains smmg_member.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function smmg_member_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.smmg_member':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Member Plugin for Small Messages Module') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function smmg_member_theme() {
+  return [
+    'smmg_member' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+

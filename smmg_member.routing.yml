@@ -1,0 +1,98 @@
+#
+# Settings
+# ---------------------------------
+#
+smmg_member.settings:
+  path: '/admin/structure/smmg_member/settings'
+  defaults:
+    _form: '\Drupal\smmg_member\Form\MemberSettingsForm'
+    _title: 'Member Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+#
+# Member
+# ---------------------------------
+
+#
+# Member landing page
+#
+smmg_member.member:
+  path: '/member'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:landing_page'
+    _title: ' Member'
+  requirements:
+    _permission: 'access content'
+
+#
+# Member subscribe
+#
+smmg_member.subscribe:
+  path: 'member/subscribe'
+  defaults:
+    _form: '\Drupal\smmg_member\Form\SubscribeForm'
+    _title: 'Subscribe to our Member'
+  requirements:
+    _permission: 'access content'
+#
+# Member subscribe direct
+#
+smmg_member.subscribe.email:
+  path: 'member/subscribe-email/{email}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:subscribeDirect'
+    _title: 'Subscribe to our Member'
+    email: null
+  requirements:
+    _permission: 'access content'
+
+#
+# Member abbestellen
+#
+smmg_member.unsubscribe:
+  path: 'member/unsubscribe/{nid}'
+  defaults:
+    _form: '\Drupal\smmg_member\Form\UnsubscribeForm'
+    _title: 'Unsubscribe from our Member'
+    nid: null
+  requirements:
+    _permission: 'access content'
+#
+# Member Thank You
+#
+smmg_member.thank_you:
+  path: '/member/thank-you/{nid}/{token}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:thankYouPage'
+    _title: 'Thank You.'
+    nid: null
+    token: null
+  requirements:
+    _permission: 'access content'
+
+#
+# Member By By
+#
+smmg_member.bye:
+  path: '/member/bye-bye/{nid}/{token}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:byePage'
+    _title: 'Bye.'
+    nid: null
+    token: null
+  requirements:
+    _permission: 'access content'
+
+#
+# member - Email Sandbox // 1594
+#
+smmg_member.sandbox_send_email:
+  path: 'member/send/{nid}/{token}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController::sandboxSendEmail'
+    _title: 'member Email Test'
+    nid: null
+    token: null
+  requirements:
+    _permission: 'access content'

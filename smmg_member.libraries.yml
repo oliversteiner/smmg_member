@@ -1,0 +1,9 @@
+smmg_member.main:
+  css:
+    theme:
+      assets/css/smmg_member.css: {}
+  js:
+    assets/js/smmg_member.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

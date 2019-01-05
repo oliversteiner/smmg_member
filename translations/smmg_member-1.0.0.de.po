@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-01-05 15:31+0100\n"
+"PO-Revision-Date: 2019-01-05 15:32+0100\n"
+"Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: t\n"
+"X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: templates\n"
+
+#: src/Controller/MemberController.php:153
+msgid "Successfully subscribed to member."
+msgstr "Member abonniert."
+
+#: src/Controller/MemberController.php:155
+msgid "Successfully unsubscribed from member."
+msgstr "Erfolgreich vom Member abgemeldet."
+
+#: src/Controller/MemberController.php:160
+msgid "This user does not exist."
+msgstr "Dieser Benutzer existiert nicht."
+
+#: src/Controller/MemberController.php:261
+msgid "Information successfully saved."
+msgstr "Informationen erfolgreich gespeichert."
+
+#: src/Form/MemberSettingsForm.php:63
+msgid "General"
+msgstr "Allgemein"
+
+#: src/Form/MemberSettingsForm.php:72
+msgid "Email Settings"
+msgstr "E-Mail Einstellungen"
+
+#: src/Form/MemberSettingsForm.php:79
+msgid "Email: From (member@example.com)"
+msgstr "Email: Von (member@example.com)"
+
+#: src/Form/MemberSettingsForm.php:86
+msgid "Email: to (sale@example.com, info@example.com)"
+msgstr "Email: An (sale@example.com, info@example.com)"
+
+#: src/Form/MemberSettingsForm.php:93
+msgid "Testmode: Don't send email to Subscriber"
+msgstr "Testmodus: Es werden keine E-Mails an Abonnenten versendet"
+
+#: src/Form/MemberSettingsForm.php:102
+#: src/Form/MemberSettingsForm.php:130
+msgid "Templates"
+msgstr "Vorlagen"
+
+#: src/Form/MemberSettingsForm.php:108
+msgid "Path of Templates"
+msgstr "Vorlagen Verzeichnis"
+
+#: src/Form/MemberSettingsForm.php:116
+msgid "Module or Theme"
+msgstr "Modul oder Theme"
+
+#: src/Form/MemberSettingsForm.php:124
+msgid "Name of Module or Theme"
+msgstr "Name des Moduls oder des Themes"
+
+#: src/Form/SubscribeForm.php:27
+msgid "Please Chose"
+msgstr "Bitte wählen"
+
+#: src/Form/SubscribeForm.php:79
+msgid "Email"
+msgstr "E-Mail"
+
+#: src/Form/SubscribeForm.php:91
+msgid "I want to receive the member."
+msgstr "Ich möchte den Member erhalten."
+
+#: src/Form/SubscribeForm.php:102
+msgid "Address"
+msgstr "Adresse"
+
+#: src/Form/SubscribeForm.php:108
+msgid ""
+"These details are not mandatory, but will help us to get to know you better."
+msgstr ""
+"Diese Angaben sind nicht verpflichtend, helfen uns aber, Sie besser "
+"kennenzulernen."
+
+#: src/Form/SubscribeForm.php:117
+msgid "Gender"
+msgstr "Titel"
+
+#: src/Form/SubscribeForm.php:128
+msgid "First Name"
+msgstr "Vorname"
+
+#: src/Form/SubscribeForm.php:140
+msgid "Last Name"
+msgstr "Nachname"
+
+#: src/Form/SubscribeForm.php:151
+msgid "Street and Nr."
+msgstr "Strasse und Nr."
+
+#: src/Form/SubscribeForm.php:162
+msgid "ZIP"
+msgstr "PLZ"
+
+#: src/Form/SubscribeForm.php:172
+msgid "City"
+msgstr "Stadt"
+
+#: src/Form/SubscribeForm.php:183
+msgid "Phone"
+msgstr "Telefon"
+
+#: src/Form/SubscribeForm.php:209
+msgid "Subscribe"
+msgstr "Abonnieren"
+
+#: src/Form/SubscribeForm.php:239
+msgid "An email address is required to receive the member."
+msgstr "Für den Empfang des Members ist eine E-Mail-Adresse erforderlich."
+
+#: src/Form/SubscribeForm.php:248
+msgid "There is something wrong with this email address."
+msgstr "Mit dieser E-Mail-Adresse stimmt etwas nicht."
+
+#: src/Form/UnsubscribeForm.php:57
+msgid "Email:"
+msgstr "E-Mail:"
+
+#: src/Form/UnsubscribeForm.php:67 src/Form/UnsubscribeForm.php:86
+msgid "unsubscribe"
+msgstr "abmelden"
+
+#: src/Form/UnsubscribeForm.php:76
+msgid "Do you really want to unsubscribe?"
+msgstr "Wollen Sie sich wirklich abmelden?"
+
+#: src/Form/UnsubscribeForm.php:85
+msgid "Yes, unsubscribe."
+msgstr "Ja, abmelden."
+
+#: src/Form/UnsubscribeForm.php:95
+msgid "Back to Homepage"
+msgstr "Zurück zur Startseite"
+
+#: src/Form/UnsubscribeForm.php:116
+msgid "An email address is required."
+msgstr "Eine E-Mail-Adresse ist erforderlich."
+
+#: src/Form/UnsubscribeForm.php:126
+msgid "There's something wrong with the email address."
+msgstr "Mit dieser E-Mail-Adresse stimmt etwas nicht."
+
+#: src/Form/UnsubscribeForm.php:135
+msgid "This email is not known to us."
+msgstr "Diese E-Mail ist uns nicht bekannt."

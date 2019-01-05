@@ -1,0 +1,14 @@
+{
+  "name": "drupal/smmg_member",
+  "type": "drupal-module",
+  "description": "Member Module for Small Messages",
+  "keywords": ["Drupal"],
+  "license": "GPL-3.0+",
+  "homepage": "https://github.com/oliversteiner/smmg_member",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://github.com/oliversteiner/smmg_member/issues",
+    "source": "https://github.com/oliversteiner/smmg_member"
+  },
+  "require": { }
+}
