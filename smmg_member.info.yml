@@ -8,8 +8,7 @@ dependencies:
   - small_messages
   - honeypot
 
-path: modules
 project: smmg_member
 version: 1.0.0
 'interface translation project': smmg_member
-'interface translation server pattern': %path/%project/translations/%project-%version.%language.po
+'interface translation server pattern': modules/%project/translations/%project-%version.%language.po
