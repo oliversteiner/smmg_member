@@ -1,8 +1,8 @@
 name: 'Small Messages - Member'
 type: module
-description: 'Member Plugin for Small Messages'
+description: 'Member Module for Small Messages'
 core: 8.x
-package: 'Messages'
+package: 'Small Messages'
 dependencies:
   - drupal:node
   - small_messages

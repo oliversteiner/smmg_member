@@ -5,4 +5,5 @@ smmg_member.settings_form:
   title: 'Member Settings'
   description: 'Configure default member settings'
   route_name: smmg_member.settings
-  parent: 'system.admin_config_content'
+  parent: small_messages.group.admin
+  weight: 10

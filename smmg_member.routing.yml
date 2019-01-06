@@ -3,7 +3,7 @@
 # ---------------------------------
 #
 smmg_member.settings:
-  path: '/admin/structure/smmg_member/settings'
+  path: '/admin/config/small_messages/smmg_member'
   defaults:
     _form: '\Drupal\smmg_member\Form\MemberSettingsForm'
     _title: 'Member Settings'
