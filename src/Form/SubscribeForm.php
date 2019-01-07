@@ -273,7 +273,6 @@ class SubscribeForm extends FormBase
 
             if ($result && $result['status']) {
 
-                dpm($result);
 
                 $arg['nid'] = intval($result['nid']);
                 $arg['token'] = $result['token'];
