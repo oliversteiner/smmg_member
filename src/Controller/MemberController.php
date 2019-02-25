@@ -85,20 +85,24 @@ class MemberController extends ControllerBase
 
     }
 
-    /**
-     * @param $nid
-     * @return array
-     */
+  /**
+   * @param $nid
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
     static function subscribe($nid)
     {
         return self::updateSubscriber($nid, true);
     }
 
 
-    /**
-     * @param $nid
-     * @return array
-     */
+  /**
+   * @param $nid
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
     static function unSubscribe($nid)
     {
         return self::updateSubscriber($nid, false);
@@ -112,7 +116,7 @@ class MemberController extends ControllerBase
      * @throws InvalidPluginDefinitionException
      * @throws PluginNotFoundException
      */
-    public static function updateSubscriber($nid = NULL, $subscribe = true)
+    public static function updateSubscriber($nid = NULL, $subscribe = true): array
     {
         $output = [
             'status' => FALSE,
