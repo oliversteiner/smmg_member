@@ -26,10 +26,6 @@ trait MemberTrait
         Email::sendmail($data);
     }
 
-    public static function generateMessageHtml($message)
-    {
-        return Email::generateMessageHtml($message);
-    }
 
     public static function getEmailAddressesFromConfig()
     {
