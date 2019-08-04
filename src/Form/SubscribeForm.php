@@ -26,7 +26,7 @@ class SubscribeForm extends FormBase
         // Load Gender Options from Taxonomy
         $gender_options[0] = t('Please Chose');
 
-        $vid = 'gender';
+        $vid = 'smmg_gender';
 
         $terms = \Drupal::entityTypeManager()
             ->getStorage('taxonomy_term')

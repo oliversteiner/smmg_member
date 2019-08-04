@@ -394,7 +394,7 @@ class MemberController extends ControllerBase
         $nid = intval($nid);
 
         // Load Terms from Taxonomy
-        $gender_list = Helper::getTermsByID('gender');
+        $gender_list = Helper::getTermsByID('smmg_gender');
 
         // Member & Member
         if ($nid) {
