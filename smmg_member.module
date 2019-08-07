@@ -41,8 +41,11 @@ function smmg_member_theme()
 
 /**
  * Implements hook_form_alter().
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
  */
-function smmg_member_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+function smmg_member_form_alter(&$form, FormStateInterface $form_state, $form_id)
 {
     // Member
     if (in_array($form_id, ['node_member_edit_form', 'node_member_form'])) {
@@ -64,7 +67,7 @@ function smmg_member_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $fo
  * @param $entity_type
  * @param \Drupal\node\NodeInterface $node
  * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param FormStateInterface $form_state
  */
 function custom_member_node_title_builder($entity_type, NodeInterface $node, $form, FormStateInterface $form_state)
 {
