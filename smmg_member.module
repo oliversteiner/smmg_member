@@ -47,42 +47,36 @@ function smmg_member_theme()
  */
 function smmg_member_form_alter(&$form, FormStateInterface $form_state, $form_id)
 {
-    // Member
-    if (in_array($form_id, ['node_member_edit_form', 'node_member_form'])) {
+  // Member
+  if (in_array($form_id, ['node_smmg_member_edit_form', 'node_smmg_member_form'])) {
 
 
 // if Token field empty fill in automaticaly
-        $token = Helper::generateToken();
-        $form['field_smmg_token']['widget'][0]['value']['#default_value'] = $token;
+    $token = Helper::generateToken();
+    $form['field_smmg_token']['widget'][0]['value']['#default_value'] = $token;
 
-        // Automatic Fill Title Field
-        $form['title']['#access'] = FALSE;
-        $form['#entity_builders'][] = 'custom_member_node_title_builder';
-    }
+    // Automatic Fill Title Field
+    $form['title']['#access'] = FALSE;
+    $form['#entity_builders'][] = 'custom_member_node_title_builder';
+  }
 }
 
 /**
  * Title builder for Member content type.
  *
  * @param $entity_type
- * @param \Drupal\node\NodeInterface $node
+ * @param NodeInterface $node
  * @param $form
  * @param FormStateInterface $form_state
  */
 function custom_member_node_title_builder($entity_type, NodeInterface $node, $form, FormStateInterface $form_state)
 {
-    $module = 'Member';
-    $first_name = '';
-    $last_name = '';
+  $module = 'Member';
 
-    if (!empty($node->get('field_first_name'))) {
-        $first_name = $node->get('field_first_name')->entity->getTitle();
-    }
+  $first_name = Helper::getFieldValue($node, 'first_name');
+  $last_name = Helper::getFieldValue($node, 'last_name');
 
-    if (!empty($node->get('field_last_name'))) {
-        $last_name = $node->get('field_last_name')->entity->getTitle();
-    }
 
 // Build Title
-    $node->setTitle($module . ' - ' . $first_name . ' ' . $last_name);
+  $node->setTitle($module . ' - ' . $first_name . ' ' . $last_name);
 }
