@@ -96,3 +96,25 @@ smmg_member.sandbox_send_email:
     token: null
   requirements:
     _permission: 'access content'
+
+#
+# API
+#
+smmg_member.api.member:
+  path: 'smmg/api/member/{id}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMember'
+    nid: null
+  requirements:
+    _permission: 'administer content'
+
+
+smmg_member.api.members:
+  path: 'smmg/api/members/{start}/{length}/{subscriber_group}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembers'
+    start: 0
+    length: 200
+    subscriber_group: null
+  requirements:
+    _permission: 'administer content'
