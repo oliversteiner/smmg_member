@@ -533,7 +533,7 @@ class MemberController extends ControllerBase
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_count = $query->getQuery()
       ->condition('type', Member::type)
-      ->sort('created', 'ASC')
+      ->sort('nid', 'ASC')
       ->count()
       ->execute();
 
@@ -550,14 +550,14 @@ class MemberController extends ControllerBase
     if ($subscriber_group) {
       $query_result = $query->getQuery()
         ->condition('type', Member::type)
-        ->sort('created', 'ASC')
+        ->sort('nid', 'ASC')
         ->range($start, $length)
         ->condition(Member::field_subscriber_group, $subscriber_group, 'IN')
         ->execute();
     } else {
       $query_result = $query->getQuery()
         ->condition('type', Member::type)
-        ->sort('created', 'ASC')
+        ->sort('nid', 'ASC')
         ->range($start, $length)
         ->execute();
     }
@@ -581,10 +581,25 @@ class MemberController extends ControllerBase
       'subscriber_group' => (int)$subscriber_group,
       'length' => (int)$length,
       'members' => $Members,
-      'nids' => $query_result,
+    //  'nids' => $query_result,
     ];
 
     // return JSON
     return new JsonResponse($response);
+  }
+
+  public function APIMembersCount(): JsonResponse
+  {
+    // Search all Members
+    // Query with entity_type.manager
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_count = $query->getQuery()
+      ->condition('type', Member::type)
+      ->count()
+      ->execute();
+
+    $response = ['all' => $query_count];
+    return new JsonResponse($response);
+
   }
 }

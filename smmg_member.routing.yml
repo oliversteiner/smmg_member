@@ -106,8 +106,8 @@ smmg_member.api.member:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMember'
     nid: null
   requirements:
-    _permission: 'administer content'
-
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 smmg_member.api.members:
   path: 'smmg/api/members/{start}/{length}/{subscriber_group}'
@@ -117,4 +117,13 @@ smmg_member.api.members:
     length: 200
     subscriber_group: null
   requirements:
-    _permission: 'administer content'
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
+smmg_member.api.members.count:
+  path: 'smmg/api/members/count'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembersCount'
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
