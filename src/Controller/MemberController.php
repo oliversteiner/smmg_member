@@ -581,7 +581,7 @@ class MemberController extends ControllerBase
       'subscriber_group' => (int)$subscriber_group,
       'length' => (int)$length,
       'members' => $Members,
-    //  'nids' => $query_result,
+      //  'nids' => $query_result,
     ];
 
     // return JSON
@@ -602,4 +602,77 @@ class MemberController extends ControllerBase
     return new JsonResponse($response);
 
   }
+
+  /**
+   * @param $newsletter_id
+   *
+   * takes all fake members
+   * changes randomly this values in Data with newsletter id:
+   *  - unsubscribe
+   *  - newsletter open
+   * @throws \Exception
+   */
+  public function testMemberRandomNewsletterChanges($message_id)
+  {
+
+    $length = 200;
+    $start = range(0, 2000);
+    // Search all Members
+    // Query with entity_type.manager
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $nids = $query->getQuery()
+      ->condition('type', Member::type)
+      ->condition(Member::field_fake, true)
+      ->sort('nid', 'ASC')
+      ->range($start, $length)
+      ->execute();
+
+    shuffle($nids);
+    $random_nids = array_splice($nids, 0, 100);
+
+    $nid_with_new_data = [];
+
+    // Load Data
+    foreach ($random_nids as $id) {
+      $alter = [];
+      $alter['id'] = $id;
+      $node = Node::load($id);
+      if (!empty($node)) {
+        $alter['title'] = $node->label();
+        $json_data = Helper::getFieldValue($node, Member::field_data);
+
+        if($json_data) {
+
+          $data = json_decode($json_data, true);
+          $alter['oldData'] = $data;
+          $new_data = [];
+          foreach ($data as $message) {
+            if ($message && $message['message_id'] && $message['message_id'] == $message_id) {
+
+              $message['open'] = true;
+              $message['messageId'] = $message['message_id'];
+              $message['send_date'] = $message['sendDate'];
+              $now = time();
+              $message['openDate'] = $now;
+
+              if (random_int(1, 5) === 1) {
+                $message['unsubscribe'] = 1;
+              }
+            }
+            $new_data[] = $message;
+          }
+          $alter['newData'] = $new_data;
+
+          $new_json_data = \json_encode($new_data, true);
+          $node->set(Member::field_data, $new_json_data);
+          $node->save();
+          $nid_with_new_data[] = $alter;
+        }
+      }
+    }
+
+    return new JsonResponse($nid_with_new_data);
+  }
+
 }
+

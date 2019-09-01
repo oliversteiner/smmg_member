@@ -138,7 +138,6 @@ class Member
 
   public function __construct($nid)
   {
-    $convert = true;
 
     $this->id = 0;
     $this->title = '';
@@ -172,7 +171,7 @@ class Member
         $node,
         self::field_accept_newsletter
       );
-      $this->fake = Helper::getFieldValue($node, self::field_fake);
+      $this->fake = (boolean)Helper::getFieldValue($node, self::field_fake);
 
       // Groups
       $this->subscriber_group = Helper::getFieldValue(
@@ -216,7 +215,11 @@ class Member
       $this->json_data = $this->_readJSONData($json);
 
 
-      if ($convert) {
+      // Batch ----------------------------------------
+
+      // Convert old Data Format
+      $convert_old_data = false;
+      if ($convert_old_data) {
         if (is_string($json)) {
           $data = json_decode($json, true);
           $newData = self::convertOldData($data);
@@ -228,6 +231,16 @@ class Member
         }
       }
 
+      // Fake
+      $set_fake_to_all = false;
+      if ($set_fake_to_all && !$this->fake) {
+        $node->set(self::field_fake, true);
+        try {
+          $node->save();
+        } catch (EntityStorageException $e) {
+        }
+      }
+      // End Batch ----------------------------------------
 
       $address = [
         'first_name' => $this->first_name,
@@ -277,7 +290,7 @@ class Member
     if (is_string($json_data)) {
       $result = json_decode($json_data, true);
 
-     // $result = self::convertOldData($result);
+      // $result = self::convertOldData($result);
       return $result;
     }
     return $result;
@@ -285,15 +298,31 @@ class Member
 
   private static function convertOldData($data)
   {
+    $new_data = [];
+
     if ($data && $data['test']) {
       $newArray = [];
       foreach ($data as $section) {
         $newArray[] = $section[0];
       }
-      return $newArray;
-    } else {
-      return $data;
+      $data = $newArray;
     }
+
+
+    foreach ($data as $message) {
+      if ($message && $message['message_id']) {
+        $new_message= [];
+        $new_message['messageId'] = $message['message_id'];
+        $new_message['sendDate'] = $message['send_date'];
+        $new_message['openDate'] = $message['open_date'];
+        $new_message['open'] = $message['open'];
+        $new_message['unsubscribe'] = $message['unsubscribe'];
+
+      }
+      $new_data[] = $new_message;
+    }
+      return $new_data;
+
   }
 
   /**

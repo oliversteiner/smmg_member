@@ -127,3 +127,12 @@ smmg_member.api.members.count:
   requirements:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
+
+smmg_member.api.members.random:
+  path: 'smmg/api/members/random/{message_id}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:testMemberRandomNewsletterChanges'
+    message_id: 0
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
