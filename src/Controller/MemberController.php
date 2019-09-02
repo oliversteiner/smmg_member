@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Drupal\smmg_member\Controller;
-
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
@@ -18,7 +16,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class MemberController extends ControllerBase
 {
-
   use MemberTrait;
 
   /**
@@ -28,7 +25,6 @@ class MemberController extends ControllerBase
   {
     $url_unsubscribe = Url::fromRoute('smmg_member.unsubscribe');
     $url_subscribe = Url::fromRoute('smmg_member.subscribe');
-
 
     $variables['url']['subscribe'] = $url_subscribe;
     $variables['url']['unsubscribe'] = $url_unsubscribe;
@@ -45,46 +41,40 @@ class MemberController extends ControllerBase
       ],
     ];
     return $build;
-
   }
 
   /**
    * @param null $email
    * @return array
    */
-  public static function subscribeDirect($email = NULL)
+  public static function subscribeDirect($email = null)
   {
     $email = trim($email);
     $token = Helper::generateToken();
 
-    $valid_email = \Drupal::service('email.validator')
-      ->isValid($email);
+    $valid_email = \Drupal::service('email.validator')->isValid($email);
 
     if (!empty($email) && $valid_email) {
-
-
       // Subscribe direct
       $data['email'] = $email;
-      $data['subscribe'] = TRUE;
+      $data['subscribe'] = true;
       $data['token'] = $token;
 
       $result = self::newSubscriber($data);
 
       if ($result['status']) {
         $output = self::thankYouPage($result['nid'], $token);
-
       } else {
         $output['error'] = [
-          '#markup' => 'Something went wrong...'
+          '#markup' => 'Something went wrong...',
         ];
       }
     } else {
       $output['error'] = [
-        '#markup' => 'Invalid email'
+        '#markup' => 'Invalid email',
       ];
     }
     return $output;
-
   }
 
   /**
@@ -98,7 +88,6 @@ class MemberController extends ControllerBase
     return self::updateSubscriber($nid, true);
   }
 
-
   /**
    * @param $nid
    * @return array
@@ -110,7 +99,6 @@ class MemberController extends ControllerBase
     return self::updateSubscriber($nid, false);
   }
 
-
   /**
    * @param null $nid
    * @param bool $subscribe
@@ -118,10 +106,10 @@ class MemberController extends ControllerBase
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
    */
-  public static function updateSubscriber($nid = NULL, $subscribe = true): array
+  public static function updateSubscriber($nid = null, $subscribe = true): array
   {
     $output = [
-      'status' => FALSE,
+      'status' => false,
       'mode' => '',
       'nid' => $nid,
       'message' => '',
@@ -134,7 +122,6 @@ class MemberController extends ControllerBase
     $nid = intval($nid);
 
     if ($nid !== '') {
-
       // Load Node
       $entity = \Drupal::entityTypeManager()
         ->getStorage('node')
@@ -142,8 +129,6 @@ class MemberController extends ControllerBase
 
       // Node exists ?
       if ($entity && $entity->bundle() == 'member') {
-
-
         // Save Subscription
         $entity->get('field_smmg_accept_member')->setValue($subscribe);
         try {
@@ -156,14 +141,13 @@ class MemberController extends ControllerBase
         $output['status'] = true;
 
         if ($subscribe) {
-          $output['message'] = t("Successfully subscribed to member.");
+          $output['message'] = t('Successfully subscribed to member.');
         } else {
-          $output['message'] = t("Successfully unsubscribed from member.");
+          $output['message'] = t('Successfully unsubscribed from member.');
         }
-
       }
     } else {
-      $output['message'] = t("This user does not exist.");
+      $output['message'] = t('This user does not exist.');
       $output['level'] = 'error';
     }
 
@@ -180,13 +164,12 @@ class MemberController extends ControllerBase
     $token = $data['token'];
 
     $output = [
-      'status' => FALSE,
+      'status' => false,
       'mode' => 'save',
-      'nid' => FALSE,
+      'nid' => false,
       'message' => '',
       'token' => $token,
     ];
-
 
     // Member
     $subscribe = $data['subscribe'];
@@ -201,11 +184,9 @@ class MemberController extends ControllerBase
     $city = $data['city'];
     $phone = $data['phone'];
 
-
     $member_nid = self::isEmailInUse($email);
 
     if ($member_nid) {
-
       $member = self::subscribe($member_nid);
 
       $output = [
@@ -215,9 +196,7 @@ class MemberController extends ControllerBase
         'token' => $member['token'],
         'message' => 'Member Update',
       ];
-
     } else {
-
       if ($first_name && $last_name) {
         $title = $first_name . ' ' . $last_name;
       } else {
@@ -225,31 +204,28 @@ class MemberController extends ControllerBase
       }
 
       try {
-
         // Load List for origin
         $vid = 'smmg_origin';
         $origin_list = Helper::getTermsByName($vid);
 
         $storage = \Drupal::entityTypeManager()->getStorage('node');
-        $new_member = $storage->create(
-          [
-            'type' => 'member',
-            'title' => $title,
-            'field_gender' => $gender,
-            'field_first_name' => $first_name,
-            'field_last_name' => $last_name,
-            'field_phone' => $phone,
-            'field_street_and_number' => $street_and_number,
-            'field_zip_code' => $zip_code,
-            'field_city' => $city,
-            'field_email' => $email,
-            'field_smmg_token' => $token,
-            'field_smmg_origin' => $origin_list['member'],
+        $new_member = $storage->create([
+          'type' => 'member',
+          'title' => $title,
+          'field_gender' => $gender,
+          'field_first_name' => $first_name,
+          'field_last_name' => $last_name,
+          'field_phone' => $phone,
+          'field_street_and_number' => $street_and_number,
+          'field_zip_code' => $zip_code,
+          'field_city' => $city,
+          'field_email' => $email,
+          'field_smmg_token' => $token,
+          'field_smmg_origin' => $origin_list['member'],
 
-            // Member
-            'field_smmg_accept_member' => $subscribe,
-          ]);
-
+          // Member
+          'field_smmg_accept_member' => $subscribe,
+        ]);
 
         // Save
         try {
@@ -265,10 +241,9 @@ class MemberController extends ControllerBase
 
           $message = t('Information successfully saved.');
           $output['message'] = $message;
-          $output['status'] = TRUE;
+          $output['status'] = true;
           $output['nid'] = $nid;
           $output['token'] = $token;
-
 
           self::sendNotivicationMail($nid, $token);
         }
@@ -289,13 +264,10 @@ class MemberController extends ControllerBase
     $result = false;
 
     if (!empty($email)) {
-
       try {
-        $nodes = \Drupal::entityTypeManager()->getStorage('node')
-          ->loadByProperties(
-            ['type' => 'member',
-              'field_email' => $email,]
-          );
+        $nodes = \Drupal::entityTypeManager()
+          ->getStorage('node')
+          ->loadByProperties(['type' => 'member', 'field_email' => $email]);
       } catch (InvalidPluginDefinitionException $e) {
       } catch (PluginNotFoundException $e) {
       }
@@ -307,7 +279,6 @@ class MemberController extends ControllerBase
     }
     return $result;
   }
-
 
   /**
    * @param bool $nid
@@ -337,7 +308,6 @@ class MemberController extends ControllerBase
     ];
     return $build;
   }
-
 
   /**
    * @param bool $nid
@@ -399,11 +369,9 @@ class MemberController extends ControllerBase
 
     // Member & Member
     if ($nid) {
-
       $member = Node::load($nid);
 
       if ($member && $member->bundle() == 'member') {
-
         // Check Token
         $node_token = Helper::getFieldValue($member, 'smmg_token');
 
@@ -412,25 +380,52 @@ class MemberController extends ControllerBase
         }
 
         // Address
-        $variables['address']['gender'] = Helper::getFieldValue($member, 'gender', $gender_list);
-        $variables['address']['first_name'] = Helper::getFieldValue($member, 'first_name');
-        $variables['address']['last_name'] = Helper::getFieldValue($member, 'last_name');
-        $variables['address']['street_and_number'] = Helper::getFieldValue($member, 'street_and_number');
-        $variables['address']['zip_code'] = Helper::getFieldValue($member, 'zip_code');
+        $variables['address']['gender'] = Helper::getFieldValue(
+          $member,
+          'gender',
+          $gender_list
+        );
+        $variables['address']['first_name'] = Helper::getFieldValue(
+          $member,
+          'first_name'
+        );
+        $variables['address']['last_name'] = Helper::getFieldValue(
+          $member,
+          'last_name'
+        );
+        $variables['address']['street_and_number'] = Helper::getFieldValue(
+          $member,
+          'street_and_number'
+        );
+        $variables['address']['zip_code'] = Helper::getFieldValue(
+          $member,
+          'zip_code'
+        );
         $variables['address']['city'] = Helper::getFieldValue($member, 'city');
-        $variables['address']['email'] = Helper::getFieldValue($member, 'email');
-        $variables['address']['phone'] = Helper::getFieldValue($member, 'phone');
+        $variables['address']['email'] = Helper::getFieldValue(
+          $member,
+          'email'
+        );
+        $variables['address']['phone'] = Helper::getFieldValue(
+          $member,
+          'phone'
+        );
 
         // Member
-        $variables['member'] = Helper::getFieldValue($member, 'smmg_accept_member');
+        $variables['member'] = Helper::getFieldValue(
+          $member,
+          'smmg_accept_member'
+        );
       }
     }
     return $variables;
   }
 
-
-  public function sandboxEmail($coupon_order_nid, $token = null, $output_mode = 'html')
-  {
+  public function sandboxEmail(
+    $coupon_order_nid,
+    $token = null,
+    $output_mode = 'html'
+  ) {
     $build = false;
 
     // Get Content
@@ -439,10 +434,8 @@ class MemberController extends ControllerBase
 
     $templates = self::getTemplates();
 
-
     // HTML Email
     if ($output_mode == 'html') {
-
       // Build HTML Content
       $template = file_get_contents($templates['email_html']);
       $build_html = [
@@ -456,10 +449,8 @@ class MemberController extends ControllerBase
       $build = $build_html;
     }
 
-
     // Plaintext
     if ($output_mode == 'plain') {
-
       // Build Plain Text Content
       $template = file_get_contents($templates['email_plain']);
 
@@ -472,16 +463,13 @@ class MemberController extends ControllerBase
       ];
 
       $build = $build_plain;
-
     }
 
     return $build;
   }
 
-
   public function sandboxSendEmail($nid, $token = null, $output_mode = 'html')
   {
-
     $build = $this->sandboxEmail($nid, $token, $output_mode);
 
     self::sendNotivicationMail($nid, $token);
@@ -489,10 +477,8 @@ class MemberController extends ControllerBase
     return $build;
   }
 
-
   public static function getTemplateNames()
   {
-
     $templates = [
       'landing_page',
       'bye_bye',
@@ -503,7 +489,6 @@ class MemberController extends ControllerBase
 
     return $templates;
   }
-
 
   public static function getTemplates()
   {
@@ -516,22 +501,24 @@ class MemberController extends ControllerBase
 
   public static function APIMember($id): JsonResponse
   {
-
     $Member = new Member($id);
     $data = $Member->getData();
     return new JsonResponse($data);
   }
 
-  public static function APIMembers($start = 0, $length = 0, $subscriber_group = null): JsonResponse
-  {
-
+  public static function APIMembers(
+    $start = 0,
+    $length = 0,
+    $subscriber_group = null
+  ): JsonResponse {
     $Members = [];
     $set = 0;
 
     // Search all Members
     // Query with entity_type.manager
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $query_count = $query->getQuery()
+    $query_count = $query
+      ->getQuery()
       ->condition('type', Member::type)
       ->sort('nid', 'ASC')
       ->count()
@@ -548,14 +535,16 @@ class MemberController extends ControllerBase
 
     // get Nids
     if ($subscriber_group) {
-      $query_result = $query->getQuery()
+      $query_result = $query
+        ->getQuery()
         ->condition('type', Member::type)
         ->sort('nid', 'ASC')
         ->range($start, $length)
         ->condition(Member::field_subscriber_group, $subscriber_group, 'IN')
         ->execute();
     } else {
-      $query_result = $query->getQuery()
+      $query_result = $query
+        ->getQuery()
         ->condition('type', Member::type)
         ->sort('nid', 'ASC')
         ->range($start, $length)
@@ -572,14 +561,13 @@ class MemberController extends ControllerBase
       $Members[] = $Member->getData();
     }
 
-
     // build Response
     $response = [
-      'count' => (int)$number_of,
-      'set' => (int)$set,
-      'start' => (int)$start,
-      'subscriber_group' => (int)$subscriber_group,
-      'length' => (int)$length,
+      'count' => (int) $number_of,
+      'set' => (int) $set,
+      'start' => (int) $start,
+      'subscriber_group' => (int) $subscriber_group,
+      'length' => (int) $length,
       'members' => $Members,
       //  'nids' => $query_result,
     ];
@@ -593,14 +581,14 @@ class MemberController extends ControllerBase
     // Search all Members
     // Query with entity_type.manager
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $query_count = $query->getQuery()
+    $query_count = $query
+      ->getQuery()
       ->condition('type', Member::type)
       ->count()
       ->execute();
 
-    $response = ['all' => $query_count];
+    $response = ['countMembers' => (int) $query_count];
     return new JsonResponse($response);
-
   }
 
   /**
@@ -614,13 +602,13 @@ class MemberController extends ControllerBase
    */
   public function testMemberRandomNewsletterChanges($message_id)
   {
-
     $length = 200;
     $start = range(0, 2000);
     // Search all Members
     // Query with entity_type.manager
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $nids = $query->getQuery()
+    $nids = $query
+      ->getQuery()
       ->condition('type', Member::type)
       ->condition(Member::field_fake, true)
       ->sort('nid', 'ASC')
@@ -641,14 +629,16 @@ class MemberController extends ControllerBase
         $alter['title'] = $node->label();
         $json_data = Helper::getFieldValue($node, Member::field_data);
 
-        if($json_data) {
-
+        if ($json_data) {
           $data = json_decode($json_data, true);
           $alter['oldData'] = $data;
           $new_data = [];
           foreach ($data as $message) {
-            if ($message && $message['message_id'] && $message['message_id'] == $message_id) {
-
+            if (
+              $message &&
+              $message['message_id'] &&
+              $message['message_id'] == $message_id
+            ) {
               $message['open'] = true;
               $message['messageId'] = $message['message_id'];
               $message['send_date'] = $message['sendDate'];
@@ -673,6 +663,4 @@ class MemberController extends ControllerBase
 
     return new JsonResponse($nid_with_new_data);
   }
-
 }
-
