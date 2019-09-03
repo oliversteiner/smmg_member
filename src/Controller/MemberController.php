@@ -4,6 +4,7 @@ namespace Drupal\smmg_member\Controller;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\contact\Entity\Message;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Url;
@@ -425,7 +426,8 @@ class MemberController extends ControllerBase
     $coupon_order_nid,
     $token = null,
     $output_mode = 'html'
-  ) {
+  )
+  {
     $build = false;
 
     // Get Content
@@ -510,7 +512,8 @@ class MemberController extends ControllerBase
     $start = 0,
     $length = 0,
     $subscriber_group = null
-  ): JsonResponse {
+  ): JsonResponse
+  {
     $Members = [];
     $set = 0;
 
@@ -563,11 +566,11 @@ class MemberController extends ControllerBase
 
     // build Response
     $response = [
-      'count' => (int) $number_of,
-      'set' => (int) $set,
-      'start' => (int) $start,
-      'subscriber_group' => (int) $subscriber_group,
-      'length' => (int) $length,
+      'count' => (int)$number_of,
+      'set' => (int)$set,
+      'start' => (int)$start,
+      'subscriber_group' => (int)$subscriber_group,
+      'length' => (int)$length,
       'members' => $Members,
       //  'nids' => $query_result,
     ];
@@ -587,7 +590,7 @@ class MemberController extends ControllerBase
       ->count()
       ->execute();
 
-    $response = ['countMembers' => (int) $query_count];
+    $response = ['countMembers' => (int)$query_count];
     return new JsonResponse($response);
   }
 
@@ -602,21 +605,29 @@ class MemberController extends ControllerBase
    */
   public function testMemberRandomNewsletterChanges($message_id)
   {
-    $length = 200;
+    $length = 400;
     $start = range(0, 2000);
     // Search all Members
     // Query with entity_type.manager
+
+
+    // get Group of message:
+    $node_message = Node::load($message_id);
+    $groups = Helper::getFieldValue($node_message, Member::field_subscriber_group);
+    $groupNames = Helper::getFieldValue($node_message, Member::field_subscriber_group, 'smmg_subscriber_group', full);
+
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $nids = $query
       ->getQuery()
       ->condition('type', Member::type)
       ->condition(Member::field_fake, true)
+      ->condition(Member::field_subscriber_group, $groups)
       ->sort('nid', 'ASC')
       ->range($start, $length)
       ->execute();
 
     shuffle($nids);
-    $random_nids = array_splice($nids, 0, 100);
+    $random_nids = array_splice($nids, 0, 50);
 
     $nid_with_new_data = [];
 
@@ -627,6 +638,7 @@ class MemberController extends ControllerBase
       $node = Node::load($id);
       if (!empty($node)) {
         $alter['title'] = $node->label();
+        $alter['groups'] = $groupNames;
         $json_data = Helper::getFieldValue($node, Member::field_data);
 
         if ($json_data) {
@@ -636,18 +648,19 @@ class MemberController extends ControllerBase
           foreach ($data as $message) {
             if (
               $message &&
-              $message['message_id'] &&
-              $message['message_id'] == $message_id
+              isset($message['messageId']) &&
+              $message['messageId'] == $message_id
             ) {
               $message['open'] = true;
-              $message['messageId'] = $message['message_id'];
-              $message['send_date'] = $message['sendDate'];
               $now = time();
-              $message['openDate'] = $now;
+              $message['openTS'] = $now;
 
-              if (random_int(1, 5) === 1) {
-                $message['unsubscribe'] = 1;
-              }
+              // unsubscribe for 1 in 5
+              $message['unsubscribe'] = random_int(1, 5) === 1 ? true : false;
+
+              // invalidEmail for 1 in 10
+              $message['invalidEmail'] = random_int(1, 10) === 1 ? true : false;
+
             }
             $new_data[] = $message;
           }

@@ -154,26 +154,26 @@ class Member
       $this->node = $node;
 
       // Default
-      $this->id = (int)$node->id();
+      $this->id = (int) $node->id();
       $this->title = $node->label();
-      $this->created = (int)$node->getCreatedTime();
-      $this->changed = (int)$node->getChangedTime();
+      $this->created = (int) $node->getCreatedTime();
+      $this->changed = (int) $node->getChangedTime();
 
       // Meta
       $this->token = Helper::getFieldValue($node, self::field_token);
-      $this->is_active = (bool)Helper::getFieldValue(
+      $this->is_active = (bool) Helper::getFieldValue(
         $node,
         self::field_is_active
       );
-      $this->transfer_id = (int)Helper::getFieldValue(
+      $this->transfer_id = (int) Helper::getFieldValue(
         $node,
         self::field_transfer_id
       );
-      $this->accept_newsletter = (bool)Helper::getFieldValue(
+      $this->accept_newsletter = (bool) Helper::getFieldValue(
         $node,
         self::field_accept_newsletter
       );
-      $this->fake = (bool)Helper::getFieldValue($node, self::field_fake);
+      $this->fake = (bool) Helper::getFieldValue($node, self::field_fake);
 
       // Groups
       $this->subscriber_group = Helper::getFieldValue(
@@ -188,7 +188,7 @@ class Member
         'smmg_origin',
         'full'
       );
-      $this->origin = $origin[0];
+      $this->origin = $origin;
 
       $this->member_type = Helper::getFieldValue(
         $node,
@@ -207,18 +207,17 @@ class Member
       $this->birthday = Helper::getFieldValue($node, self::field_birthday);
 
       // contact
-      $this->email = (string)Helper::getFieldValue($node, self::field_email);
-      $this->phone = (string)Helper::getFieldValue($node, self::field_phone);
-      $this->phone_2 = (string)Helper::getFieldValue(
+      $this->email = (string) Helper::getFieldValue($node, self::field_email);
+      $this->phone = (string) Helper::getFieldValue($node, self::field_phone);
+      $this->phone_2 = (string) Helper::getFieldValue(
         $node,
         self::field_phone_2
       );
-      $this->mobile = (string)Helper::getFieldValue($node, self::field_mobile);
+      $this->mobile = (string) Helper::getFieldValue($node, self::field_mobile);
 
       // JSON Data
       $json = Helper::getFieldValue($node, self::field_data);
       $this->json_data = $this->_readJSONData($json);
-
 
       // Batch ----------------------------------------
 
@@ -232,7 +231,7 @@ class Member
           $this->json_data = $newData;
           $node->set(self::field_data, json_encode($newData));
           try {
-               $node->save();
+            $node->save();
           } catch (EntityStorageException $e) {
           }
         }
@@ -266,7 +265,7 @@ class Member
       ];
 
       $this->data = [
-        'id' => (int)$node->id(),
+        'id' => (int) $node->id(),
         'name' => $node->label(),
         'created' => $this->created,
         'changed' => $this->changed,
@@ -279,9 +278,8 @@ class Member
         'fake' => $this->fake,
         'groups' => $this->subscriber_group,
         'origin' => $this->origin,
-      //  'data_old' => $this->json_data_old,
+        //  'data_old' => $this->json_data_old,
         'data' => $this->json_data,
-
       ];
     }
   }
@@ -324,7 +322,7 @@ class Member
   {
     $new_data = [];
 
-    if ($data && $data['test']) {
+    if ($data && isset($data['test'])) {
       $newArray = [];
       foreach ($data as $section) {
         $newArray[] = $section[0];
@@ -334,55 +332,53 @@ class Member
 
     foreach ($data as $message) {
       if ($message) {
-
         // Message ID
-        if ($message['message_id']) {
-          $messageId = (int)$message['message_id'];
+        if (isset($message['message_id'])) {
+          $messageId = (int) $message['message_id'];
         } else {
-          $messageId = (int)$message['messageId'];
+          $messageId = (int) $message['messageId'];
         }
 
-        if ($message['unsubscribe']) {
-          $unsubscribe = (bool)$message['unsubscribe'];
+        if (isset($message['unsubscribe'])) {
+          $unsubscribe = (bool) $message['unsubscribe'];
         } else {
           $unsubscribe = false;
         }
 
-
-
         // Send Date
-        if ($message['sendDate']) {
-          $sendTS = (int)$message['sendDate'];
+        if (isset($message['sendDate'])) {
+          $sendTS = (int) $message['sendDate'];
           $send = true;
-        } else if ($message['send_date']) {
-          $sendTS = (int)$message['send_date'];
+        } elseif (isset($message['send_date'])) {
+          $sendTS = (int) $message['send_date'];
           $send = true;
-
         } else {
           $sendTS = 0;
           $send = false;
         }
 
-
+        if (isset($message['messageId'])) {
+          $send = true;
+        }
 
         // Open Date
-        if ($message['open_date']) {
-          $openTS = (int)$message['open_date'];
-        } elseif ($message['openDate']) {
-          $openTS = (int)$message['openDate'];
+        if (isset($message['open_date'])) {
+          $openTS = (int) $message['open_date'];
+        } elseif (isset($message['openDate'])) {
+          $openTS = (int) $message['openDate'];
         } else {
           $openTS = 0;
         }
 
         // Open / Read Message
-        if (is_array($message['open'])) {
-          $open = (bool)$message['open'][0];
-          $openTS = (int)$message['open'][1];
+        if (isset($message['open']) && is_array($message['open'])) {
+          $open = (bool) $message['open'][0];
+          $openTS = (int) $message['open'][1];
         } else {
-          $open = (bool)$message['open'];
+          $open = (bool) $message['open'];
         }
 
-        if($open && $openTS === 0) {
+        if ($open && $openTS === 0) {
           $openTS = strtotime('+1 day', $sendTS);
         }
 
@@ -392,14 +388,10 @@ class Member
           : ($invalidEmail = false);
 
         // error
-        $message['error']
-          ? ($error = $message['error'])
-          : ($error = '');
+        $message['error'] ? ($error = $message['error']) : ($error = '');
 
         // test
-        $message['test']
-          ? ($test = $message['test'])
-          : ($test = false);
+        $message['test'] ? ($test = $message['test']) : ($test = false);
 
         $result = [
           'messageId' => $messageId,
@@ -472,21 +464,24 @@ class Member
    *
    */
   public static function buildJsonData(
-    array $data,
+    $data,
     int $message_id,
     bool $test = false
-  ): array
-  {
+  ): array {
+    if (!$data) {
+      $data = array();
+    }
+
     // set send and send Timestamp
     $send = true;
-    $date = new DateTime();
-    $send_date_timestamp = $date->getTimestamp();
+    $sendTS = time();
+
 
     // Build new Message Entry
     $new_item = [
       'messageId' => $message_id,
       'send' => $send,
-      'sendTS' => $send_date_timestamp,
+      'sendTS' => $sendTS,
       'open' => false,
       'openTS' => 0,
       'unsubscribe' => false,
