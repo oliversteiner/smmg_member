@@ -426,8 +426,7 @@ class MemberController extends ControllerBase
     $coupon_order_nid,
     $token = null,
     $output_mode = 'html'
-  )
-  {
+  ) {
     $build = false;
 
     // Get Content
@@ -508,12 +507,57 @@ class MemberController extends ControllerBase
     return new JsonResponse($data);
   }
 
+  public static function APIMembersSync($changed = 0): JsonResponse
+  {
+    // Check Input
+    if (!$changed) {
+      return new JsonResponse('request not valid');
+    }
+
+
+    $members = [];
+    // Search all members newer then $changed
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_count = $query
+      ->getQuery()
+      ->condition('type', Member::type)
+      ->condition('changed', $changed, '>')
+      ->count()
+      ->execute();
+
+    // Load only if less ten 200 Nodes
+    if ($query_count < 300) {
+      $query_result = $query
+        ->getQuery()
+        ->condition('type', Member::type)
+        ->condition('changed', $changed, '>')
+        ->sort('nid', 'ASC')
+        ->execute();
+
+      // Load Data
+      foreach ($query_result as $nid) {
+        $member = new Member($nid);
+        $members[] = $member->getData();
+      }
+    }
+
+    // build Response
+    $response = [
+      'version' => 8,
+      'count' => (int) $query_count,
+      'members' => $members,
+      'nids' => $query_result,
+    ];
+
+    // return JSON
+    return new JsonResponse($response);
+  }
+
   public static function APIMembers(
     $start = 0,
     $length = 0,
     $subscriber_group = null
-  ): JsonResponse
-  {
+  ): JsonResponse {
     $Members = [];
     $set = 0;
 
@@ -566,11 +610,11 @@ class MemberController extends ControllerBase
 
     // build Response
     $response = [
-      'count' => (int)$number_of,
-      'set' => (int)$set,
-      'start' => (int)$start,
-      'subscriber_group' => (int)$subscriber_group,
-      'length' => (int)$length,
+      'count' => (int) $number_of,
+      'set' => (int) $set,
+      'start' => (int) $start,
+      'subscriber_group' => (int) $subscriber_group,
+      'length' => (int) $length,
       'members' => $Members,
       //  'nids' => $query_result,
     ];
@@ -590,7 +634,7 @@ class MemberController extends ControllerBase
       ->count()
       ->execute();
 
-    $response = ['countMembers' => (int)$query_count];
+    $response = ['countMembers' => (int) $query_count];
     return new JsonResponse($response);
   }
 
@@ -610,11 +654,18 @@ class MemberController extends ControllerBase
     // Search all Members
     // Query with entity_type.manager
 
-
     // get Group of message:
     $node_message = Node::load($message_id);
-    $groups = Helper::getFieldValue($node_message, Member::field_subscriber_group);
-    $groupNames = Helper::getFieldValue($node_message, Member::field_subscriber_group, 'smmg_subscriber_group', full);
+    $groups = Helper::getFieldValue(
+      $node_message,
+      Member::field_subscriber_group
+    );
+    $groupNames = Helper::getFieldValue(
+      $node_message,
+      Member::field_subscriber_group,
+      'smmg_subscriber_group',
+      full
+    );
 
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $nids = $query
@@ -660,7 +711,6 @@ class MemberController extends ControllerBase
 
               // invalidEmail for 1 in 10
               $message['invalidEmail'] = random_int(1, 10) === 1 ? true : false;
-
             }
             $new_data[] = $message;
           }

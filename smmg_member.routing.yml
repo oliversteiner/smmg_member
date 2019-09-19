@@ -136,3 +136,12 @@ smmg_member.api.members.random:
   requirements:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
+
+smmg_member.api.members.sync:
+  path: 'smmg/api/members/sync/{changed}'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembersSync'
+    changed: 0
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development

@@ -80,13 +80,9 @@ class Member
 
   // JSON DATA
   public const field_data = 'field_data';
-  /**
-   * @var void
-   */
+
   private $json_data;
-  /**
-   * @var string
-   */
+
   private $token;
   /**
    * @var bool
@@ -100,41 +96,23 @@ class Member
    * @var bool
    */
   private $accept_newsletter;
-  /**
-   * @var array
-   */
+
   private $subscriber_group;
-  /**
-   * @var array
-   */
+
   private $origin;
-  /**
-   * @var string
-   */
+
   private $first_name;
-  /**
-   * @var string
-   */
+
   private $last_name;
-  /**
-   * @var string
-   */
+
   private $street_and_number;
-  /**
-   * @var string
-   */
+
   private $zip_code;
-  /**
-   * @var string
-   */
+
   private $city;
-  /**
-   * @var string
-   */
+
   private $birthday;
-  /**
-   * @var integer
-   */
+
   private $member_type;
   private $json_data_old;
 
