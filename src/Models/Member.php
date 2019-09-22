@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Drupal\smmg_member\Types;
+namespace Drupal\smmg_member\Models;
 
 use DateTime;
 use Drupal\Core\Entity\EntityStorageException;
