@@ -4,6 +4,7 @@ namespace Drupal\smmg_member\Controller;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Serialization\Json;
 use Drupal\contact\Entity\Message;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
@@ -185,7 +186,7 @@ class MemberController extends ControllerBase
     $city = $data['city'];
     $phone = $data['phone'];
 
-    $member_nid = self::isEmailInUse($email);
+    $member_nid = Member::isEmailInUse($email);
 
     if ($member_nid) {
       $member = self::subscribe($member_nid);
@@ -255,31 +256,6 @@ class MemberController extends ControllerBase
     return $output;
   }
 
-  /**
-   * @param $email
-   *
-   * @return false or nid
-   */
-  static function isEmailInUse($email)
-  {
-    $result = false;
-
-    if (!empty($email)) {
-      try {
-        $nodes = \Drupal::entityTypeManager()
-          ->getStorage('node')
-          ->loadByProperties(['type' => 'member', 'field_email' => $email]);
-      } catch (InvalidPluginDefinitionException $e) {
-      } catch (PluginNotFoundException $e) {
-      }
-
-      if ($node = reset($nodes)) {
-        // found $node that matches the title
-        $result = $node->id();
-      }
-    }
-    return $result;
-  }
 
   /**
    * @param bool $nid
@@ -426,7 +402,8 @@ class MemberController extends ControllerBase
     $coupon_order_nid,
     $token = null,
     $output_mode = 'html'
-  ) {
+  )
+  {
     $build = false;
 
     // Get Content
@@ -544,7 +521,7 @@ class MemberController extends ControllerBase
     // build Response
     $response = [
       'version' => 8,
-      'count' => (int) $query_count,
+      'count' => (int)$query_count,
       'members' => $members,
       'nids' => $query_result,
     ];
@@ -557,7 +534,8 @@ class MemberController extends ControllerBase
     $start = 0,
     $length = 0,
     $subscriber_group = null
-  ): JsonResponse {
+  ): JsonResponse
+  {
     $Members = [];
     $set = 0;
 
@@ -610,17 +588,35 @@ class MemberController extends ControllerBase
 
     // build Response
     $response = [
-      'count' => (int) $number_of,
-      'set' => (int) $set,
-      'start' => (int) $start,
-      'subscriber_group' => (int) $subscriber_group,
-      'length' => (int) $length,
+      'count' => (int)$number_of,
+      'set' => (int)$set,
+      'start' => (int)$start,
+      'subscriber_group' => (int)$subscriber_group,
+      'length' => (int)$length,
       'members' => $Members,
       //  'nids' => $query_result,
     ];
 
     // return JSON
     return new JsonResponse($response);
+  }
+
+  /**
+   * @param $id
+   * @param $data
+   * @return JsonResponse
+   * @throws EntityStorageException
+   * @throws PluginNotFoundException
+   *
+   * @route smmg_member.api.members.update
+   */
+  public static function APIMemberUpdate2(): JsonResponse
+  {
+
+    $id = $_POST['id'];
+    $data = $_POST['data'];
+    $result = Member::updateSubscriber($id, $data);
+    return new JsonResponse($result);
   }
 
   public function APIMembersCount(): JsonResponse
@@ -634,7 +630,7 @@ class MemberController extends ControllerBase
       ->count()
       ->execute();
 
-    $response = ['countMembers' => (int) $query_count];
+    $response = ['countMembers' => (int)$query_count];
     return new JsonResponse($response);
   }
 
