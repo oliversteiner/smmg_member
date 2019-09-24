@@ -14,6 +14,7 @@ use Drupal\small_messages\Utility\Helper;
 use Drupal\smmg_member\Models\Member;
 use Drupal\smmg_member\Utility\MemberTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class MemberController extends ControllerBase
@@ -39,8 +40,8 @@ class MemberController extends ControllerBase
         '#type' => 'inline_template',
         '#template' => $template,
         '#attached' => ['library' => ['smmg_member/smmg_member.main']],
-        '#context' => $variables,
-      ],
+        '#context' => $variables
+      ]
     ];
     return $build;
   }
@@ -68,12 +69,12 @@ class MemberController extends ControllerBase
         $output = self::thankYouPage($result['nid'], $token);
       } else {
         $output['error'] = [
-          '#markup' => 'Something went wrong...',
+          '#markup' => 'Something went wrong...'
         ];
       }
     } else {
       $output['error'] = [
-        '#markup' => 'Invalid email',
+        '#markup' => 'Invalid email'
       ];
     }
     return $output;
@@ -116,7 +117,7 @@ class MemberController extends ControllerBase
       'nid' => $nid,
       'message' => '',
       'type' => 'status', // status, warning, error
-      'token' => false,
+      'token' => false
     ];
 
     // valiade number:
@@ -170,7 +171,7 @@ class MemberController extends ControllerBase
       'mode' => 'save',
       'nid' => false,
       'message' => '',
-      'token' => $token,
+      'token' => $token
     ];
 
     // Member
@@ -196,7 +197,7 @@ class MemberController extends ControllerBase
         'mode' => 'save',
         'nid' => $member_nid,
         'token' => $member['token'],
-        'message' => 'Member Update',
+        'message' => 'Member Update'
       ];
     } else {
       if ($first_name && $last_name) {
@@ -226,7 +227,7 @@ class MemberController extends ControllerBase
           'field_smmg_origin' => $origin_list['member'],
 
           // Member
-          'field_smmg_accept_member' => $subscribe,
+          'field_smmg_accept_member' => $subscribe
         ]);
 
         // Save
@@ -256,7 +257,6 @@ class MemberController extends ControllerBase
     return $output;
   }
 
-
   /**
    * @param bool $nid
    * @param bool $token
@@ -280,8 +280,8 @@ class MemberController extends ControllerBase
         '#type' => 'inline_template',
         '#template' => $template,
         '#attached' => ['library' => ['smmg_member/smmg_member.main']],
-        '#context' => self::memberVariables($nid, $token),
-      ],
+        '#context' => self::memberVariables($nid, $token)
+      ]
     ];
     return $build;
   }
@@ -308,8 +308,8 @@ class MemberController extends ControllerBase
         '#type' => 'inline_template',
         '#template' => $template,
         '#attached' => ['library' => ['smmg_member/smmg_member.main']],
-        '#context' => self::memberVariables($nid, $token),
-      ],
+        '#context' => self::memberVariables($nid, $token)
+      ]
     ];
     return $build;
   }
@@ -402,8 +402,7 @@ class MemberController extends ControllerBase
     $coupon_order_nid,
     $token = null,
     $output_mode = 'html'
-  )
-  {
+  ) {
     $build = false;
 
     // Get Content
@@ -413,22 +412,22 @@ class MemberController extends ControllerBase
     $templates = self::getTemplates();
 
     // HTML Email
-    if ($output_mode == 'html') {
+    if ($output_mode === 'html') {
       // Build HTML Content
       $template = file_get_contents($templates['email_html']);
       $build_html = [
         'description' => [
           '#type' => 'inline_template',
           '#template' => $template,
-          '#context' => $data,
-        ],
+          '#context' => $data
+        ]
       ];
 
       $build = $build_html;
     }
 
     // Plaintext
-    if ($output_mode == 'plain') {
+    if ($output_mode === 'plain') {
       // Build Plain Text Content
       $template = file_get_contents($templates['email_plain']);
 
@@ -436,8 +435,8 @@ class MemberController extends ControllerBase
         'description' => [
           '#type' => 'inline_template',
           '#template' => $template,
-          '#context' => $data,
-        ],
+          '#context' => $data
+        ]
       ];
 
       $build = $build_plain;
@@ -455,20 +454,20 @@ class MemberController extends ControllerBase
     return $build;
   }
 
-  public static function getTemplateNames()
+  public static function getTemplateNames(): array
   {
     $templates = [
       'landing_page',
       'bye_bye',
       'thank_you',
       'email_html',
-      'email_plain',
+      'email_plain'
     ];
 
     return $templates;
   }
 
-  public static function getTemplates()
+  public static function getTemplates(): array
   {
     $module = 'smmg_member';
     $template_names = self::getTemplateNames();
@@ -490,7 +489,6 @@ class MemberController extends ControllerBase
     if (!$changed) {
       return new JsonResponse('request not valid');
     }
-
 
     $members = [];
     // Search all members newer then $changed
@@ -521,9 +519,9 @@ class MemberController extends ControllerBase
     // build Response
     $response = [
       'version' => 8,
-      'count' => (int)$query_count,
+      'count' => (int) $query_count,
       'members' => $members,
-      'nids' => $query_result,
+      'nids' => $query_result
     ];
 
     // return JSON
@@ -534,8 +532,7 @@ class MemberController extends ControllerBase
     $start = 0,
     $length = 0,
     $subscriber_group = null
-  ): JsonResponse
-  {
+  ): JsonResponse {
     $Members = [];
     $set = 0;
 
@@ -588,12 +585,12 @@ class MemberController extends ControllerBase
 
     // build Response
     $response = [
-      'count' => (int)$number_of,
-      'set' => (int)$set,
-      'start' => (int)$start,
-      'subscriber_group' => (int)$subscriber_group,
-      'length' => (int)$length,
-      'members' => $Members,
+      'count' => (int) $number_of,
+      'set' => (int) $set,
+      'start' => (int) $start,
+      'subscriber_group' => (int) $subscriber_group,
+      'length' => (int) $length,
+      'members' => $Members
       //  'nids' => $query_result,
     ];
 
@@ -602,20 +599,20 @@ class MemberController extends ControllerBase
   }
 
   /**
-   * @param $id
-   * @param $data
+   * @param Request $request
    * @return JsonResponse
    * @throws EntityStorageException
    * @throws PluginNotFoundException
-   *
    * @route smmg_member.api.members.update
    */
-  public static function APIMemberUpdate2(): JsonResponse
+  public static function APIMemberUpdate(): JsonResponse
   {
+    $post_as_json = \Drupal::request()->getContent();
 
-    $id = $_POST['id'];
-    $data = $_POST['data'];
-    $result = Member::updateSubscriber($id, $data);
+    $data = json_decode($post_as_json, true);
+
+    $result = Member::updateSubscriber($data);
+
     return new JsonResponse($result);
   }
 
@@ -630,7 +627,7 @@ class MemberController extends ControllerBase
       ->count()
       ->execute();
 
-    $response = ['countMembers' => (int)$query_count];
+    $response = ['countMembers' => (int) $query_count];
     return new JsonResponse($response);
   }
 
@@ -686,13 +683,13 @@ class MemberController extends ControllerBase
       if (!empty($node)) {
         $alter['title'] = $node->label();
         $alter['groups'] = $groupNames;
-        $json_data = Helper::getFieldValue($node, Member::field_data);
+        $telemetry = Helper::getFieldValue($node, Member::field_telemetry);
 
-        if ($json_data) {
-          $data = json_decode($json_data, true);
-          $alter['oldData'] = $data;
-          $new_data = [];
-          foreach ($data as $message) {
+        if ($telemetry) {
+          $old_telemetry = json_decode($telemetry, true);
+          $alter['oldData'] = $old_telemetry;
+          $new_telemetry = [];
+          foreach ($old_telemetry as $message) {
             if (
               $message &&
               isset($message['messageId']) &&
@@ -708,12 +705,12 @@ class MemberController extends ControllerBase
               // invalidEmail for 1 in 10
               $message['invalidEmail'] = random_int(1, 10) === 1 ? true : false;
             }
-            $new_data[] = $message;
+            $new_telemetry[] = $message;
           }
-          $alter['newData'] = $new_data;
+          $alter['newData'] = $new_telemetry;
 
-          $new_json_data = \json_encode($new_data, true);
-          $node->set(Member::field_data, $new_json_data);
+          $new_telemetry = \json_encode($new_telemetry, true);
+          $node->set(Member::field_telemetry, $new_telemetry);
           $node->save();
           $nid_with_new_data[] = $alter;
         }

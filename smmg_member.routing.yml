@@ -146,11 +146,11 @@ smmg_member.api.members.sync:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
 
-
+# to create new Member leaf data.id empty
 smmg_member.api.members.update:
   path: 'smmg/api/member/update'
   defaults:
-    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMemberUpdate2'
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APIMemberUpdate'
   requirements:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
