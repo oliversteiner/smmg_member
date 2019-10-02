@@ -154,3 +154,43 @@ smmg_member.api.members.update:
   requirements:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
+
+#
+# Terms
+#
+
+# SubscriberGroup
+smmg_member.api.terms.subscribergroup:
+  path: 'smmg/api/terms/subscriber-group'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsSubscriberGroup'
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
+# Gender
+smmg_member.api.terms.gender:
+  path: 'smmg/api/terms/gender'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsGender'
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
+# Origin
+smmg_member.api.terms.origin:
+  path: 'smmg/api/terms/origin'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsOrigin'
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
+# Country
+smmg_member.api.terms.country:
+  path: 'smmg/api/terms/country'
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsCountry'
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development

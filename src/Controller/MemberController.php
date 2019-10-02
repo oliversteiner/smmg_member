@@ -719,4 +719,101 @@ class MemberController extends ControllerBase
 
     return new JsonResponse($nid_with_new_data);
   }
+
+
+
+  public static function countMemberInVocabularyField($field, $tid)
+  {
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_count = $query
+      ->getQuery()
+      ->condition('type', Member::type)
+      ->condition($field, $tid)
+      ->count()
+      ->execute();
+
+    return $query_count;
+  }
+
+
+  function APITermsSubscriberGroup()
+  {
+    $name = 'subscriber-group';
+    $vocabulary = Member::term_subscriber_group;
+    $field= Member::field_subscriber_group;
+    $terms = [];
+
+    $response = $this->APITerms($vocabulary, $field, $terms, $name);
+
+    return new JsonResponse($response);
+  }
+
+  function APITermsGender()
+  {
+    $name = 'gender';
+    $vocabulary = Member::term_gender;
+    $field= Member::field_gender;
+    $terms = [];
+
+    $response = $this->APITerms($vocabulary, $field, $terms, $name);
+
+    return new JsonResponse($response);
+  }
+
+  function APITermsOrigin()
+  {
+    $name = 'origin';
+    $vocabulary = Member::term_origin;
+    $field= Member::field_origin;
+    $terms = [];
+
+    $response = $this->APITerms($vocabulary, $field, $terms, $name);
+
+    return new JsonResponse($response);
+  }
+
+  function APITermsCountry()
+  {
+    $name = 'country';
+    $vocabulary = Member::term_country;
+    $field= Member::field_country;
+    $terms = [];
+
+    $response = $this->APITerms($vocabulary, $field, $terms, $name);
+
+    return new JsonResponse($response);
+  }
+
+
+
+  /**
+   * @param string $vocabulary
+   * @param string $field
+   * @param array $terms
+   * @param string $name
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public function APITerms(string $vocabulary, string $field, array $terms, string $name): array
+  {
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadTree($vocabulary);
+    foreach ($nodes as $node) {
+      $terms[] = array(
+        'id' => (int)$node->tid,
+        'name' => $node->name,
+        'count' => (int)self::countMemberInVocabularyField($field, $node->tid),
+      );
+    }
+
+    $response = [
+      'name' => 'api/terms/'.$name,
+      'version' => '1.0.0',
+      'terms' => $terms];
+    return $response;
+  }
+
+
 }

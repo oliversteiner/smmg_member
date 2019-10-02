@@ -79,6 +79,7 @@ class Member
   public const field_street_and_number = 'field_street_and_number';
   public const field_zip_code = 'field_zip_code';
   public const field_city = 'field_city';
+  public const field_country = 'field_country';
 
   // Contact
   public const field_email = 'field_email';
@@ -97,37 +98,19 @@ class Member
   public const term_subscriber_group = 'smmg_subscriber_group';
 
   private $telemetry;
-
   private $token;
-  /**
-   * @var bool
-   */
   private $is_active;
-  /**
-   * @var int
-   */
   private $transfer_id;
-  /**
-   * @var bool
-   */
   private $accept_newsletter;
-
   private $subscriber_group;
-
   private $origin;
-
   private $first_name;
-
   private $last_name;
-
   private $street_and_number;
-
   private $zip_code;
-
   private $city;
-
+  private $country;
   private $birthday;
-
   private $member_type;
   private $telemetry_old;
   private $gender;
@@ -149,26 +132,26 @@ class Member
         $this->node = $node;
 
         // Default
-        $this->id = (int) $node->id();
+        $this->id = (int)$node->id();
         $this->title = $node->label();
-        $this->created = (int) $node->getCreatedTime();
-        $this->changed = (int) $node->getChangedTime();
+        $this->created = (int)$node->getCreatedTime();
+        $this->changed = (int)$node->getChangedTime();
 
         // Meta
         $this->token = Helper::getFieldValue($node, self::field_token);
-        $this->is_active = (bool) Helper::getFieldValue(
+        $this->is_active = (bool)Helper::getFieldValue(
           $node,
           self::field_is_active
         );
-        $this->transfer_id = (int) Helper::getFieldValue(
+        $this->transfer_id = (int)Helper::getFieldValue(
           $node,
           self::field_transfer_id
         );
-        $this->accept_newsletter = (bool) Helper::getFieldValue(
+        $this->accept_newsletter = (bool)Helper::getFieldValue(
           $node,
           self::field_accept_newsletter
         );
-        $this->fake = (bool) Helper::getFieldValue($node, self::field_fake);
+        $this->fake = (bool)Helper::getFieldValue($node, self::field_fake);
 
         // Groups
         $this->subscriber_group = Helper::getFieldValue(
@@ -183,6 +166,14 @@ class Member
           $node,
           self::field_origin,
           self::term_origin,
+          'full'
+        );
+
+        // Country
+        $this->country = Helper::getFieldValue(
+          $node,
+          self::field_country,
+          self::term_country,
           'full'
         );
 
@@ -223,13 +214,13 @@ class Member
         $this->city = Helper::getFieldValue($node, self::field_city);
 
         // contact
-        $this->email = (string) Helper::getFieldValue($node, self::field_email);
-        $this->phone = (string) Helper::getFieldValue($node, self::field_phone);
-        $this->phone_2 = (string) Helper::getFieldValue(
+        $this->email = (string)Helper::getFieldValue($node, self::field_email);
+        $this->phone = (string)Helper::getFieldValue($node, self::field_phone);
+        $this->phone_2 = (string)Helper::getFieldValue(
           $node,
           self::field_phone_2
         );
-        $this->mobile = (string) Helper::getFieldValue(
+        $this->mobile = (string)Helper::getFieldValue(
           $node,
           self::field_mobile
         );
@@ -281,7 +272,8 @@ class Member
         $address = [
           'street_and_number' => $this->street_and_number,
           'zip_code' => $this->zip_code,
-          'city' => $this->city
+          'city' => $this->city,
+          'country' => $this->country,
         ];
 
         $contact = [
@@ -292,7 +284,7 @@ class Member
         ];
 
         $this->data = [
-          'id' => (int) $node->id(),
+          'id' => (int)$node->id(),
           'name' => $node->label(),
           'created' => $this->created,
           'changed' => $this->changed,
@@ -362,23 +354,23 @@ class Member
       if ($message) {
         // Message ID
         if (isset($message['message_id'])) {
-          $messageId = (int) $message['message_id'];
+          $messageId = (int)$message['message_id'];
         } else {
-          $messageId = (int) $message['messageId'];
+          $messageId = (int)$message['messageId'];
         }
 
         if (isset($message['unsubscribe'])) {
-          $unsubscribe = (bool) $message['unsubscribe'];
+          $unsubscribe = (bool)$message['unsubscribe'];
         } else {
           $unsubscribe = false;
         }
 
         // Send Date
         if (isset($message['sendDate'])) {
-          $sendTS = (int) $message['sendDate'];
+          $sendTS = (int)$message['sendDate'];
           $send = true;
         } elseif (isset($message['send_date'])) {
-          $sendTS = (int) $message['send_date'];
+          $sendTS = (int)$message['send_date'];
           $send = true;
         } else {
           $sendTS = 0;
@@ -391,19 +383,19 @@ class Member
 
         // Open Date
         if (isset($message['open_date'])) {
-          $openTS = (int) $message['open_date'];
+          $openTS = (int)$message['open_date'];
         } elseif (isset($message['openDate'])) {
-          $openTS = (int) $message['openDate'];
+          $openTS = (int)$message['openDate'];
         } else {
           $openTS = 0;
         }
 
         // Open / Read Message
         if (isset($message['open']) && is_array($message['open'])) {
-          $open = (bool) $message['open'][0];
-          $openTS = (int) $message['open'][1];
+          $open = (bool)$message['open'][0];
+          $openTS = (int)$message['open'][1];
         } else {
-          $open = (bool) $message['open'];
+          $open = (bool)$message['open'];
         }
 
         if ($open && $openTS === 0) {
@@ -489,7 +481,7 @@ class Member
         break;
 
       case 'boolean':
-        $save = (bool) $input;
+        $save = (bool)$input;
         break;
 
       default:
@@ -559,7 +551,8 @@ class Member
     $telemetry,
     int $message_id,
     bool $test = false
-  ): array {
+  ): array
+  {
     if (!$telemetry) {
       $telemetry = array();
     }
@@ -713,7 +706,7 @@ class Member
     if (!$data['id'] || empty($data['id']) || $data['id'] === 0) {
       $action = 'create';
     } else {
-      $id = (int) $data['id'];
+      $id = (int)$data['id'];
       $action = 'update';
     }
     $output['action'] = $action;
@@ -766,14 +759,14 @@ class Member
         // ---------------------------------------------- //
 
         // Title : string
-        if ($data['title']) {
+        if (isset($data['title'])) {
           $title = self::sanitizedInput($data['title'], 'string');
           $entity->set('title', $title);
           $debug['title'] = $title;
         }
 
         // $body : html
-        if ($data['body']) {
+        if (isset($data['body'])) {
           $body = self::sanitizedInput($data['body'], 'html');
           $entity->set('body', $body);
           $debug['body'] = $body;
@@ -783,28 +776,28 @@ class Member
         // ---------------------------------------------- //
 
         // fake :Boolean
-        if ($data['fake']) {
+        if (isset($data['fake'])) {
           $fake = self::sanitizedInput($data['fake'], 'boolean');
           $entity->set(self::field_fake, $fake);
           $debug['fake'] = $fake;
         }
 
         // active : Boolean
-        if ($data['active']) {
+        if (isset($data['active'])) {
           $active = self::sanitizedInput($data['active'], 'boolean');
           $entity->set(self::field_is_active, $active);
           $debug['active'] = $active;
         }
 
         // token : string
-        if ($data['token']) {
+        if (isset($data['token'])) {
           $token = self::sanitizedInput($data['token'], 'string');
           $entity->set(self::field_token, $token);
           $debug['token'] = $token;
         }
 
         // transfer_id : string
-        if ($data['transfer_id']) {
+        if (isset($data['transfer_id'])) {
           $transfer_id = self::sanitizedInput($data['transfer_id'], 'string');
           $entity->set(self::field_transfer_id, $transfer_id);
           $debug['transfer_id'] = $transfer_id;
@@ -813,28 +806,22 @@ class Member
         // Groups
         // ------------------------------------------
         // groups : array int -> Taxonomy Term
-        if ($data['groups']) {
-          $groups = self::sanitizedInput($data['typ'], 'int');
+        if (isset($data['groups'])) {
+          $groups = self::convertToTerms($data['groups']);
           $entity->set(self::field_subscriber_group, $groups);
           $debug['groups'] = $groups;
         }
 
         // Member Type : int -> entity id
-        if ($data['typ']) {
+        if (isset($data['typ'])) {
           $typ = self::sanitizedInput($data['typ'], 'int');
           $entity->set(self::field_member_type, $typ);
           $debug['typ'] = $typ;
         }
 
         // origin : array, int -> taxonomy term
-        if ($data['origin']) {
-          if($data['origin'][0] && $data['origin'][0]['id'] ){
-            $origin_tid = $data['origin'][0]['id'];
-            $origin = self::sanitizedInput( $origin_tid, 'int');
-          }else{
-            $origin = false;
-          }
-
+        if (isset($data['origin'])) {
+          $origin = self::convertToTerms($data['origin']);
           $entity->set(self::field_origin, $origin);
           $debug['origin'] = $origin;
         }
@@ -844,41 +831,35 @@ class Member
 
         // gender :array int -> Taxonomy Term
         // TODO check input with Term IDs
-        if ($personal['gender']) {
-          if($personal['gender'][0] && $personal['gender'][0]['id'] ){
-            $gender_tid = $personal['origin'][0]['id'];
-            $gender = self::sanitizedInput( $gender_tid, 'int');
-          }else{
-            $gender = false;
-          }
-
+        if (isset($personal['gender'])) {
+          $gender = self::convertToTerms($personal['gender']);
           $entity->set(self::field_gender, $gender);
           $debug['gender'] = $gender;
         }
 
         // first_name : string
-        if ($personal['first_name']) {
+        if (isset($personal['first_name'])) {
           $first_name = self::sanitizedInput($personal['first_name'], 'string');
           $entity->set(self::field_first_name, $first_name);
           $debug['first_name'] = $first_name;
         }
 
         // last_name : string
-        if ($personal['last_name']) {
+        if (isset($personal['last_name'])) {
           $last_name = self::sanitizedInput($personal['last_name'], 'string');
           $entity->set(self::field_last_name, $last_name);
           $debug['last_name'] = $last_name;
         }
 
         // birthday: Date as Unix Timestamp // TODO date or ts
-        if ($personal['birthday']) {
+        if (isset($personal['birthday'])) {
           $birthday = self::sanitizedInput($personal['birthday'], 'string');
           $entity->set(self::field_birthday, $birthday);
           $debug['birthday'] = $birthday;
         }
 
         // newsletter : Boolean
-        if ($personal['newsletter']) {
+        if (isset($personal['newsletter'])) {
           $newsletter = self::sanitizedInput(
             $personal['newsletter'],
             'boolean'
@@ -891,14 +872,14 @@ class Member
         // ---------------------------------------------- //
 
         // zip_code : string or number?
-        if ($address['zip_code']) {
+        if (isset($address['zip_code'])) {
           $zip_code = self::sanitizedInput($address['zip_code'], 'int');
           $entity->set(self::field_zip_code, $zip_code);
           $debug['zip_code'] = $zip_code;
         }
 
         // street_and_number : string
-        if ($address['street_and_number']) {
+        if (isset($address['street_and_number'])) {
           $street_and_number = self::sanitizedInput(
             $address['street_and_number'],
             'string'
@@ -908,23 +889,15 @@ class Member
         }
 
         // city : string
-        if ($address['city']) {
+        if (isset($address['city'])) {
           $city = self::sanitizedInput($address['city'], 'string');
           $entity->set(self::field_city, $city);
           $debug['city'] = $city;
         }
 
         // city : string
-        if ($address['country']) {
-
-          if($address['country'][0] && $address['country'][0]['id'] ){
-            $country_tid = $address['country'][0]['id'];
-            $country = self::sanitizedInput( $country_tid, 'int');
-          }else{
-            $country = false;
-          }
-
-          $country = self::sanitizedInput($address['country'], 'string');
+        if (isset($address['country'])) {
+          $country = self::convertToTerms($address['country']);
           $entity->set(self::field_city, $country);
           $debug['country'] = $country;
         }
@@ -933,35 +906,35 @@ class Member
         // ---------------------------------------------- //
 
         // email : email
-        if ($contact['email']) {
+        if (isset($contact['email'])) {
           $email = self::sanitizedInput($contact['email'], 'email');
           $entity->set(self::field_email, $email);
           $debug['email'] = $email;
         }
 
         // mobile : string
-        if ($contact['mobile']) {
+        if (isset($contact['mobile'])) {
           $mobile = self::sanitizedInput($contact['mobile'], 'string');
           $entity->set(self::field_mobile, $mobile);
           $debug['mobile'] = $mobile;
         }
 
         // phone : string
-        if ($contact['phone']) {
+        if (isset($contact['phone'])) {
           $phone = self::sanitizedInput($contact['phone'], 'string');
           $entity->set(self::field_phone, $phone);
           $debug['phone'] = $phone;
         }
 
         // phone_2 : string
-        if ($contact['phone_2']) {
+        if (isset($contact['phone_2'])) {
           $phone_2 = self::sanitizedInput($contact['phone_2'], 'string');
           $entity->set(self::field_phone_2, $phone_2);
           $debug['phone_2'] = $phone_2;
         }
 
         // Additional DATA (as JSON)
-        if ($data['telemetry']) {
+        if (isset($data['telemetry'])) {
           $telemetry = self::sanitizedInput($data['telemetry'], 'json');
           $entity->set(self::field_telemetry, $telemetry);
           $debug['telemetry'] = $telemetry;
@@ -976,7 +949,7 @@ class Member
         $newId = $entity->id();
         $output['message'] = t('Information successfully saved.');
         $output['status'] = true;
-        $output['nid'] = (int) $newId;
+        $output['nid'] = (int)$newId;
       } catch (EntityStorageException $e) {
         $output['message'] = t('Error on save Node.');
         $output['status'] = false;
@@ -984,6 +957,35 @@ class Member
     }
     $output['debug'] = $debug;
     return $output;
+  }
+
+  /**
+   * @param $data
+   * @param bool $single
+   * @return array | int
+   */
+  public static function convertToTerms($data, $single = false)
+  {
+    $new_data = [];
+
+    if ($data && is_array($data)) {
+      foreach ($data as $item) {
+        if ($item['id']) {
+
+          // secure input
+          $id = filter_var($item['id'], FILTER_SANITIZE_NUMBER_INT);
+
+          // multifield: add to array
+          $new_data[] = (int)$id;
+
+          // single field: just one int
+          if ($single) {
+            return (int)$id;
+          }
+        }
+      }
+    }
+    return $new_data;
   }
 
   /**
