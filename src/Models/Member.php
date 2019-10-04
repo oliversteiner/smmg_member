@@ -241,23 +241,19 @@ class Member
 
         // Convert old Data Format
         $convert_telemetry_old = false;
-        if ($convert_telemetry_old) {
+        if ($convert_telemetry_old && $this->json_old && empty($this->telemetry)) {
 
-
-          if($this->json_old && empty($this->telemetry)){
-
-              $newData = self::convertOldData($this->json_old);
-              $this->telemetry = $newData;
-              $node->set(self::field_telemetry, json_encode($newData));
-              try {
-                $node->save();
-              } catch (EntityStorageException $e) {
-              }
+            $newData = self::convertOldData($this->json_old);
+            $this->telemetry = $newData;
+            $node->set(self::field_telemetry, json_encode($newData));
+            try {
+              $node->save();
+            } catch (EntityStorageException $e) {
             }
           }
 
 
-        }
+
 
         // Fake
         $set_fake_to_all = false;
@@ -310,7 +306,7 @@ class Member
           'fake' => $this->fake,
           'groups' => $this->subscriber_group,
           'origin' => $this->origin,
-          'telemetry' => $this->telemetry
+          'telemetry' => $this->telemetry,
         ];
       }
     }
