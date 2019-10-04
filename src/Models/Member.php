@@ -253,8 +253,6 @@ class Member
           }
 
 
-
-
         // Fake
         $set_fake_to_all = false;
         if ($set_fake_to_all && !$this->fake) {
