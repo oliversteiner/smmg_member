@@ -88,7 +88,8 @@ class Member
   public const field_mobile = 'field_mobile';
 
   // Additional DATA (as JSON)
-  public const field_telemetry = 'field_data';
+  public const field_old_data = 'field_data';
+  public const field_telemetry = 'field_smmg_telemetry';
 
   /* Drupal Taxonomy */
   public const term_origin = 'smmg_origin';
@@ -114,6 +115,10 @@ class Member
   private $member_type;
   private $telemetry_old;
   private $gender;
+  /**
+   * @var array
+   */
+  private $json_old;
 
   public function __construct($nid)
   {
@@ -226,6 +231,9 @@ class Member
         );
 
         // JSON Data
+        $json_old = Helper::getFieldValue($node, self::field_old_data);
+        $this->json_old= $this->_readJSONData($json_old);
+
         $json = Helper::getFieldValue($node, self::field_telemetry);
         $this->telemetry = $this->_readJSONData($json);
 
@@ -234,17 +242,21 @@ class Member
         // Convert old Data Format
         $convert_telemetry_old = false;
         if ($convert_telemetry_old) {
-          if (is_string($json)) {
-            $telemetry = json_decode($json, true);
-            $this->telemetry_old = $telemetry;
-            $newData = self::convertOldData($telemetry);
-            $this->telemetry = $newData;
-            $node->set(self::field_telemetry, json_encode($newData));
-            try {
-              $node->save();
-            } catch (EntityStorageException $e) {
+
+
+          if($this->json_old && empty($this->telemetry)){
+
+              $newData = self::convertOldData($this->json_old);
+              $this->telemetry = $newData;
+              $node->set(self::field_telemetry, json_encode($newData));
+              try {
+                $node->save();
+              } catch (EntityStorageException $e) {
+              }
             }
           }
+
+
         }
 
         // Fake
@@ -273,7 +285,7 @@ class Member
           'street_and_number' => $this->street_and_number,
           'zip_code' => $this->zip_code,
           'city' => $this->city,
-          'country' => $this->country,
+          'country' => $this->country
         ];
 
         $contact = [
@@ -971,7 +983,6 @@ class Member
     if ($data && is_array($data)) {
       foreach ($data as $item) {
         if ($item['id']) {
-
           // secure input
           $id = filter_var($item['id'], FILTER_SANITIZE_NUMBER_INT);
 
@@ -1015,5 +1026,22 @@ class Member
       }
     }
     return $result;
+  }
+
+  /**
+   * @param $id
+   * @return bool|null
+   */
+  public static function delete($id): ?bool
+  {
+    $node = Node::load((int)$id);
+    if (!empty($node)) {
+      try {
+        $node->delete();
+        return true;
+      } catch (EntityStorageException $e) {
+        return false;
+      }
+    }
   }
 }

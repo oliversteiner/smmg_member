@@ -109,6 +109,28 @@ smmg_member.api.member:
     #    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! use only for development
 
+
+smmg_member.api.member.create:
+  path: 'smmg/api/member'
+  methods: [PUT]
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\APIController:new'
+    nid: null
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
+
+smmg_member.api.member.delete:
+  path: 'smmg/api/member/{id}'
+  methods: [DELETE]
+  defaults:
+    _controller: '\Drupal\smmg_member\Controller\APIController:delete'
+    nid: null
+  requirements:
+    #    _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
+
 smmg_member.api.members:
   path: 'smmg/api/members/{start}/{length}/{subscriber_group}'
   defaults:
