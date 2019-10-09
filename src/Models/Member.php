@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Drupal\smmg_member\Models;
 
-use DateTime;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityStorageException;
@@ -137,26 +136,26 @@ class Member
         $this->node = $node;
 
         // Default
-        $this->id = (int)$node->id();
+        $this->id = (int) $node->id();
         $this->title = $node->label();
-        $this->created = (int)$node->getCreatedTime();
-        $this->changed = (int)$node->getChangedTime();
+        $this->created = (int) $node->getCreatedTime();
+        $this->changed = (int) $node->getChangedTime();
 
         // Meta
         $this->token = Helper::getFieldValue($node, self::field_token);
-        $this->is_active = (bool)Helper::getFieldValue(
+        $this->is_active = (bool) Helper::getFieldValue(
           $node,
           self::field_is_active
         );
-        $this->transfer_id = (int)Helper::getFieldValue(
+        $this->transfer_id = (int) Helper::getFieldValue(
           $node,
           self::field_transfer_id
         );
-        $this->accept_newsletter = (bool)Helper::getFieldValue(
+        $this->accept_newsletter = (bool) Helper::getFieldValue(
           $node,
           self::field_accept_newsletter
         );
-        $this->fake = (bool)Helper::getFieldValue($node, self::field_fake);
+        $this->fake = (bool) Helper::getFieldValue($node, self::field_fake);
 
         // Groups
         $this->subscriber_group = Helper::getFieldValue(
@@ -219,20 +218,20 @@ class Member
         $this->city = Helper::getFieldValue($node, self::field_city);
 
         // contact
-        $this->email = (string)Helper::getFieldValue($node, self::field_email);
-        $this->phone = (string)Helper::getFieldValue($node, self::field_phone);
-        $this->phone_2 = (string)Helper::getFieldValue(
+        $this->email = (string) Helper::getFieldValue($node, self::field_email);
+        $this->phone = (string) Helper::getFieldValue($node, self::field_phone);
+        $this->phone_2 = (string) Helper::getFieldValue(
           $node,
           self::field_phone_2
         );
-        $this->mobile = (string)Helper::getFieldValue(
+        $this->mobile = (string) Helper::getFieldValue(
           $node,
           self::field_mobile
         );
 
         // JSON Data
         $json_old = Helper::getFieldValue($node, self::field_old_data);
-        $this->json_old= $this->_readJSONData($json_old);
+        $this->json_old = $this->_readJSONData($json_old);
 
         $json = Helper::getFieldValue($node, self::field_telemetry);
         $this->telemetry = $this->_readJSONData($json);
@@ -241,17 +240,19 @@ class Member
 
         // Convert old Data Format
         $convert_telemetry_old = false;
-        if ($convert_telemetry_old && $this->json_old && empty($this->telemetry)) {
-
-            $newData = self::convertOldData($this->json_old);
-            $this->telemetry = $newData;
-            $node->set(self::field_telemetry, json_encode($newData));
-            try {
-              $node->save();
-            } catch (EntityStorageException $e) {
-            }
+        if (
+          $convert_telemetry_old &&
+          $this->json_old &&
+          empty($this->telemetry)
+        ) {
+          $newData = self::convertOldData($this->json_old);
+          $this->telemetry = $newData;
+          $node->set(self::field_telemetry, json_encode($newData));
+          try {
+            $node->save();
+          } catch (EntityStorageException $e) {
           }
-
+        }
 
         // Fake
         $set_fake_to_all = false;
@@ -290,7 +291,7 @@ class Member
         ];
 
         $this->data = [
-          'id' => (int)$node->id(),
+          'id' => (int) $node->id(),
           'name' => $node->label(),
           'created' => $this->created,
           'changed' => $this->changed,
@@ -304,7 +305,7 @@ class Member
           'fake' => $this->fake,
           'groups' => $this->subscriber_group,
           'origin' => $this->origin,
-          'telemetry' => $this->telemetry,
+          'telemetry' => $this->telemetry
         ];
       }
     }
@@ -360,23 +361,23 @@ class Member
       if ($message) {
         // Message ID
         if (isset($message['message_id'])) {
-          $messageId = (int)$message['message_id'];
+          $messageId = (int) $message['message_id'];
         } else {
-          $messageId = (int)$message['messageId'];
+          $messageId = (int) $message['messageId'];
         }
 
         if (isset($message['unsubscribe'])) {
-          $unsubscribe = (bool)$message['unsubscribe'];
+          $unsubscribe = (bool) $message['unsubscribe'];
         } else {
           $unsubscribe = false;
         }
 
         // Send Date
         if (isset($message['sendDate'])) {
-          $sendTS = (int)$message['sendDate'];
+          $sendTS = (int) $message['sendDate'];
           $send = true;
         } elseif (isset($message['send_date'])) {
-          $sendTS = (int)$message['send_date'];
+          $sendTS = (int) $message['send_date'];
           $send = true;
         } else {
           $sendTS = 0;
@@ -389,19 +390,19 @@ class Member
 
         // Open Date
         if (isset($message['open_date'])) {
-          $openTS = (int)$message['open_date'];
+          $openTS = (int) $message['open_date'];
         } elseif (isset($message['openDate'])) {
-          $openTS = (int)$message['openDate'];
+          $openTS = (int) $message['openDate'];
         } else {
           $openTS = 0;
         }
 
         // Open / Read Message
         if (isset($message['open']) && is_array($message['open'])) {
-          $open = (bool)$message['open'][0];
-          $openTS = (int)$message['open'][1];
+          $open = (bool) $message['open'][0];
+          $openTS = (int) $message['open'][1];
         } else {
-          $open = (bool)$message['open'];
+          $open = (bool) $message['open'];
         }
 
         if ($open && $openTS === 0) {
@@ -487,7 +488,7 @@ class Member
         break;
 
       case 'boolean':
-        $save = (bool)$input;
+        $save = (bool) $input;
         break;
 
       default:
@@ -557,8 +558,7 @@ class Member
     $telemetry,
     int $message_id,
     bool $test = false
-  ): array
-  {
+  ): array {
     if (!$telemetry) {
       $telemetry = array();
     }
@@ -712,7 +712,7 @@ class Member
     if (!$data['id'] || empty($data['id']) || $data['id'] === 0) {
       $action = 'create';
     } else {
-      $id = (int)$data['id'];
+      $id = (int) $data['id'];
       $action = 'update';
     }
     $output['action'] = $action;
@@ -955,7 +955,7 @@ class Member
         $newId = $entity->id();
         $output['message'] = t('Information successfully saved.');
         $output['status'] = true;
-        $output['nid'] = (int)$newId;
+        $output['nid'] = (int) $newId;
       } catch (EntityStorageException $e) {
         $output['message'] = t('Error on save Node.');
         $output['status'] = false;
@@ -981,11 +981,11 @@ class Member
           $id = filter_var($item['id'], FILTER_SANITIZE_NUMBER_INT);
 
           // multifield: add to array
-          $new_data[] = (int)$id;
+          $new_data[] = (int) $id;
 
           // single field: just one int
           if ($single) {
-            return (int)$id;
+            return (int) $id;
           }
         }
       }
@@ -1028,8 +1028,9 @@ class Member
    */
   public static function delete($id): ?bool
   {
-    $node = Node::load((int)$id);
-    if (!empty($node)) {
+    $node = Node::load((int) $id);
+    $bundle = self::type;
+    if (!empty($node) && $node->bundle() === $bundle) {
       try {
         $node->delete();
         return true;
