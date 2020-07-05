@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": "AAGA,oBAAqB;EACnB,OAAO,EAAE,IAAI",
-"sources": ["smmg_member.scss"],
-"names": [],
-"file": "smmg_member.css"
-}
+{"version":3,"sourceRoot":"","sources":["smmg_member.scss"],"names":[],"mappings":"AAGA;EACE","file":"smmg_member.css"}
