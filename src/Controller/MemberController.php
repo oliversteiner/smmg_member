@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\contact\Entity\Message;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Helper;
@@ -807,10 +808,13 @@ class MemberController extends ControllerBase
         'count' => (int)self::countMemberInVocabularyField($field, $node->tid),
       );
     }
+    /* DEV: Insert Mollo Token from /site/files/settings.php */
+    $mollo = Settings::get('mollo');
 
     $response = [
       'name' => 'api/terms/'.$name,
       'version' => '1.0.0',
+      'token' => $mollo['token'],
       'terms' => $terms];
     return $response;
   }
