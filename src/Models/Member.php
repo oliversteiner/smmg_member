@@ -99,9 +99,9 @@ class Member
 
   private $telemetry;
   private $token;
-  private $is_active;
-  private $transfer_id;
-  private $accept_newsletter;
+  private bool $is_active;
+  private int $transfer_id;
+  private bool $accept_newsletter;
   private $subscriber_group;
   private $origin;
   private $first_name;
@@ -111,8 +111,6 @@ class Member
   private $city;
   private $country;
   private $birthday;
-  private $member_type;
-  private $telemetry_old;
   private $gender;
   /**
    * @var array
@@ -121,10 +119,8 @@ class Member
 
   public function __construct($nid)
   {
-    $this->id = 0;
     $this->title = '';
     $this->created = false;
-    $this->changed = false;
     $this->done = false;
     $this->active = false;
     $this->data = [];
@@ -132,8 +128,7 @@ class Member
     if ($nid) {
       $node = Node::load($nid);
 
-      if (!empty($node)) {
-        $this->node = $node;
+      if ($node !== null) {
 
         // Default
         $this->id = (int) $node->id();
@@ -271,21 +266,21 @@ class Member
 
         $personal = [
           'gender' => $this->gender,
-          'first_name' => $this->first_name,
-          'last_name' => $this->last_name,
+          'firstName' => $this->first_name,
+          'lastName' => $this->last_name,
           'birthday' => $this->birthday
         ];
 
         $address = [
-          'street_and_number' => $this->street_and_number,
-          'zip_code' => $this->zip_code,
+          'streetAndNumber' => $this->street_and_number,
+          'zipCode' => $this->zip_code,
           'city' => $this->city,
           'country' => $this->country
         ];
 
         $contact = [
           'phone' => $this->phone,
-          'phone_2' => $this->phone_2,
+          'phone2' => $this->phone_2,
           'mobile' => $this->mobile,
           'email' => $this->email
         ];
@@ -299,8 +294,8 @@ class Member
           'contact' => $contact,
           'address' => $address,
           'token' => $this->token,
-          'is_active' => $this->is_active,
-          'transfer_id' => $this->transfer_id,
+          'isActive' => $this->is_active,
+          'transferId' => $this->transfer_id,
           'newsletter' => $this->accept_newsletter,
           'fake' => $this->fake,
           'groups' => $this->subscriber_group,
