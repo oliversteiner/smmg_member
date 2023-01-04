@@ -107,8 +107,8 @@ smmg_member.api.member:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMember'
     nid: null
   requirements:
-       _permission: 'administer content'
-    # _permission: 'access content' # TODO Warning! use only for development
+    #  _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 
 smmg_member.api.member.create:
@@ -118,8 +118,8 @@ smmg_member.api.member.create:
     _controller: '\Drupal\smmg_member\Controller\APIController:new'
     nid: null
   requirements:
-    _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+    #  _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 
 smmg_member.api.member.delete:
@@ -129,8 +129,8 @@ smmg_member.api.member.delete:
     _controller: '\Drupal\smmg_member\Controller\APIController:delete'
     nid: null
   requirements:
-      _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+    #  _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 smmg_member.api.members:
   path: 'smmg/api/members/{start}/{length}/{subscriber_group}'
@@ -141,7 +141,7 @@ smmg_member.api.members:
     subscriber_group: null
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 smmg_member.api.members.count:
   path: 'smmg/api/members/count'
@@ -149,7 +149,7 @@ smmg_member.api.members.count:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembersCount'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 smmg_member.api.members.random:
   path: 'smmg/api/members/random/{message_id}'
@@ -157,8 +157,8 @@ smmg_member.api.members.random:
     _controller: '\Drupal\smmg_member\Controller\MemberController:testMemberRandomNewsletterChanges'
     message_id: 0
   requirements:
-    _permission: 'administer content'
-   # _permission: 'access content' # TODO Warning! use only for development
+    #  _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 smmg_member.api.members.sync:
   path: 'smmg/api/members/sync/{changed}'
@@ -166,8 +166,8 @@ smmg_member.api.members.sync:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembersSync'
     changed: 0
   requirements:
-     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+    #  _permission: 'administer content'
+    _permission: 'access content' # TODO Warning! use only for development
 
 # to create new Member leaf data.id empty
 smmg_member.api.members.update:
@@ -176,7 +176,7 @@ smmg_member.api.members.update:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMemberUpdate'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 #
 # Terms
@@ -189,7 +189,7 @@ smmg_member.api.terms.subscribergroup:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsSubscriberGroup'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 # Gender
 smmg_member.api.terms.gender:
@@ -198,7 +198,7 @@ smmg_member.api.terms.gender:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsGender'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 # Origin
 smmg_member.api.terms.origin:
@@ -207,7 +207,7 @@ smmg_member.api.terms.origin:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsOrigin'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
 
 # Country
 smmg_member.api.terms.country:
@@ -216,4 +216,4 @@ smmg_member.api.terms.country:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsCountry'
   requirements:
     _permission: 'administer content'
-    #_permission: 'access content' # TODO Warning! use only for development
+
