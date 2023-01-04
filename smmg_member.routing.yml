@@ -140,7 +140,7 @@ smmg_member.api.members:
     length: 200
     subscriber_group: null
   requirements:
-      _permission: 'access content'
+    _permission: 'administer content'
     #_permission: 'access content' # TODO Warning! use only for development
 
 smmg_member.api.members.count:
@@ -148,7 +148,7 @@ smmg_member.api.members.count:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMembersCount'
   requirements:
-      _permission: 'access content'
+    _permission: 'administer content'
     #_permission: 'access content' # TODO Warning! use only for development
 
 smmg_member.api.members.random:
@@ -175,7 +175,7 @@ smmg_member.api.members.update:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APIMemberUpdate'
   requirements:
-      _permission: 'access content'
+    _permission: 'administer content'
     #_permission: 'access content' # TODO Warning! use only for development
 
 #
@@ -188,8 +188,8 @@ smmg_member.api.terms.subscribergroup:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsSubscriberGroup'
   requirements:
-    _permission: 'access content'
-  #  _permission: 'access content' # TODO Warning! use only for development
+    _permission: 'administer content'
+    #_permission: 'access content' # TODO Warning! use only for development
 
 # Gender
 smmg_member.api.terms.gender:
@@ -197,8 +197,8 @@ smmg_member.api.terms.gender:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsGender'
   requirements:
-    _permission: 'access content'
-  #  _permission: 'access content' # TODO Warning! use only for development
+    _permission: 'administer content'
+    #_permission: 'access content' # TODO Warning! use only for development
 
 # Origin
 smmg_member.api.terms.origin:
@@ -206,8 +206,8 @@ smmg_member.api.terms.origin:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsOrigin'
   requirements:
-   _permission: 'access content'
-   # _permission: 'access content' # TODO Warning! use only for development
+    _permission: 'administer content'
+    #_permission: 'access content' # TODO Warning! use only for development
 
 # Country
 smmg_member.api.terms.country:
@@ -215,5 +215,5 @@ smmg_member.api.terms.country:
   defaults:
     _controller: '\Drupal\smmg_member\Controller\MemberController:APITermsCountry'
   requirements:
-    _permission: 'access content'
-   # _permission: 'access content' # TODO Warning! use only for development
+    _permission: 'administer content'
+    #_permission: 'access content' # TODO Warning! use only for development
