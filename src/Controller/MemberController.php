@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
-use Drupal\small_messages\Utility\Helper;
 use Drupal\smmg_member\Models\Member;
 use Drupal\smmg_member\Utility\MemberTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;

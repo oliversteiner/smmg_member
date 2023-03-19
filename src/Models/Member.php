@@ -7,7 +7,6 @@ use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
-use Drupal\small_messages\Utility\Helper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**

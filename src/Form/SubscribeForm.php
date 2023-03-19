@@ -5,7 +5,6 @@ namespace Drupal\smmg_member\Form;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\small_messages\Utility\Helper;
 use Drupal\smmg_member\Controller\MemberController;
 
 
