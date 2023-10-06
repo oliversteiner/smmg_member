@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *    - field_phone_2
  *    - field_street_and_number
  *    - field_smmg_subscriber_group
- *    - field_smmg_token
+ *    - field_mollo_token
  *    - field_smmg_user
  *    - field_zip_code
  *
@@ -59,7 +59,7 @@ class Member
   public const field_fake = 'field_smmg_fake';
   public const field_is_active = 'field_smmg_is_active';
   public const field_transfer_id = 'field_id';
-  public const field_token = 'field_smmg_token';
+  public const field_token = 'field_mollo_token';
 
   // Groups
   public const field_subscriber_group = 'field_smmg_subscriber_group';
@@ -136,23 +136,23 @@ class Member
         $this->changed = (int) $node->getChangedTime();
 
         // Meta
-        $this->token = Helper::getFieldValue($node, self::field_token);
-        $this->is_active = (bool) Helper::getFieldValue(
+        $this->token = MolloUtils::getFieldValue($node, self::field_token);
+        $this->is_active = (bool) MolloUtils::getFieldValue(
           $node,
           self::field_is_active
         );
-        $this->transfer_id = (int) Helper::getFieldValue(
+        $this->transfer_id = (int) MolloUtils::getFieldValue(
           $node,
           self::field_transfer_id
         );
-        $this->accept_newsletter = (bool) Helper::getFieldValue(
+        $this->accept_newsletter = (bool) MolloUtils::getFieldValue(
           $node,
           self::field_accept_newsletter
         );
-        $this->fake = (bool) Helper::getFieldValue($node, self::field_fake);
+        $this->fake = (bool) MolloUtils::getFieldValue($node, self::field_fake);
 
         // Groups
-        $this->subscriber_group = Helper::getFieldValue(
+        $this->subscriber_group = MolloUtils::getFieldValue(
           $node,
           self::field_subscriber_group,
           self::term_subscriber_group,
@@ -160,7 +160,7 @@ class Member
         );
 
         // Origin
-        $this->origin = Helper::getFieldValue(
+        $this->origin = MolloUtils::getFieldValue(
           $node,
           self::field_origin,
           self::term_origin,
@@ -168,14 +168,14 @@ class Member
         );
 
         // Country
-        $this->country = Helper::getFieldValue(
+        $this->country = MolloUtils::getFieldValue(
           $node,
           self::field_country,
           self::term_country,
           'full'
         );
 
-        $this->member_type = Helper::getFieldValue(
+        $this->member_type = MolloUtils::getFieldValue(
           $node,
           self::field_member_type
         );
@@ -184,7 +184,7 @@ class Member
         // ------------------------------------------
 
         // Gender
-        $this->gender = Helper::getFieldValue(
+        $this->gender = MolloUtils::getFieldValue(
           $node,
           self::field_gender,
           self::term_gender,
@@ -192,42 +192,42 @@ class Member
         );
 
         // First Name
-        $this->first_name = Helper::getFieldValue(
+        $this->first_name = MolloUtils::getFieldValue(
           $node,
           self::field_first_name
         );
 
         // Last Name
-        $this->last_name = Helper::getFieldValue($node, self::field_last_name);
+        $this->last_name = MolloUtils::getFieldValue($node, self::field_last_name);
 
         // Bithday
-        $this->birthday = Helper::getFieldValue($node, self::field_birthday);
+        $this->birthday = MolloUtils::getFieldValue($node, self::field_birthday);
 
         // Addresss
-        $this->street_and_number = Helper::getFieldValue(
+        $this->street_and_number = MolloUtils::getFieldValue(
           $node,
           self::field_street_and_number
         );
-        $this->zip_code = Helper::getFieldValue($node, self::field_zip_code);
-        $this->city = Helper::getFieldValue($node, self::field_city);
+        $this->zip_code = MolloUtils::getFieldValue($node, self::field_zip_code);
+        $this->city = MolloUtils::getFieldValue($node, self::field_city);
 
         // contact
-        $this->email = (string) Helper::getFieldValue($node, self::field_email);
-        $this->phone = (string) Helper::getFieldValue($node, self::field_phone);
-        $this->phone_2 = (string) Helper::getFieldValue(
+        $this->email = (string) MolloUtils::getFieldValue($node, self::field_email);
+        $this->phone = (string) MolloUtils::getFieldValue($node, self::field_phone);
+        $this->phone_2 = (string) MolloUtils::getFieldValue(
           $node,
           self::field_phone_2
         );
-        $this->mobile = (string) Helper::getFieldValue(
+        $this->mobile = (string) MolloUtils::getFieldValue(
           $node,
           self::field_mobile
         );
 
         // JSON Data
-        $json_old = Helper::getFieldValue($node, self::field_old_data);
+        $json_old = MolloUtils::getFieldValue($node, self::field_old_data);
         $this->json_old = $this->_readJSONData($json_old);
 
-        $json = Helper::getFieldValue($node, self::field_telemetry);
+        $json = MolloUtils::getFieldValue($node, self::field_telemetry);
         $this->telemetry = $this->_readJSONData($json);
 
         // Batch ----------------------------------------
@@ -621,7 +621,7 @@ class Member
     try {
       // Load List for origin
       $vid = 'smmg_origin';
-      $origin_list = Helper::getTermsByName($vid);
+      $origin_list = MolloUtils::getTermsByName($vid);
 
       $storage = \Drupal::entityTypeManager()->getStorage('node');
       $new_member = $storage->create([
@@ -635,7 +635,7 @@ class Member
         'field_zip_code' => $zip_code,
         'field_city' => $city,
         'field_email' => $email,
-        'field_smmg_token' => $token,
+        'field_mollo_token' => $token,
         'field_smmg_origin' => $origin_list['member'],
 
         // Member

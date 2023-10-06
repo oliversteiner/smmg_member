@@ -42,7 +42,7 @@ Drupal Module: Member Module for Small Messages
 
 
 ### Security
-- field_smmg_token
+- field_mollo_token
 
 
 ### Deprecated

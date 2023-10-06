@@ -19,7 +19,7 @@ dependencies:
     - field.field.node.smmg_member.field_smmg_is_active
     - field.field.node.smmg_member.field_smmg_origin
     - field.field.node.smmg_member.field_smmg_subscriber_group
-    - field.field.node.smmg_member.field_smmg_token
+    - field.field.node.smmg_member.field_mollo_token
     - field.field.node.smmg_member.field_smmg_user
     - field.field.node.smmg_member.field_street_and_number
     - field.field.node.smmg_member.field_zip_code
@@ -169,7 +169,7 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_smmg_token:
+  field_mollo_token:
     weight: 138
     settings:
       size: 60

@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\node\NodeInterface;
 
 /**
@@ -51,8 +52,8 @@ function smmg_member_form_alter(&$form, FormStateInterface $form_state, $form_id
 
 
 // if Token field empty fill in automaticaly
-    $token = Helper::generateToken();
-    $form['field_smmg_token']['widget'][0]['value']['#default_value'] = $token;
+    $token = MolloUtils::generateToken();
+    $form['field_mollo_token']['widget'][0]['value']['#default_value'] = $token;
 
     // Automatic Fill Title Field
     $form['title']['#access'] = FALSE;
@@ -72,8 +73,8 @@ function custom_member_node_title_builder($entity_type, NodeInterface $node, $fo
 {
   $module = 'Member';
 
-  $first_name = Helper::getFieldValue($node, 'first_name');
-  $last_name = Helper::getFieldValue($node, 'last_name');
+  $first_name = MolloUtils::getFieldValue($node, 'first_name');
+  $last_name = MolloUtils::getFieldValue($node, 'last_name');
 
 
 // Build Title

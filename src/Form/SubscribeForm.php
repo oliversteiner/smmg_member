@@ -191,7 +191,7 @@ class SubscribeForm extends FormBase
         // Submit
         // ===============================================
 
-        $token = Helper::generateToken();
+        $token = MolloUtils::generateToken();
 
         $form['token'] = [
             '#type' => 'hidden',

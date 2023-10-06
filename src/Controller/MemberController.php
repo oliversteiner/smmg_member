@@ -53,7 +53,7 @@ class MemberController extends ControllerBase
   public static function subscribeDirect($email = null)
   {
     $email = trim($email);
-    $token = Helper::generateToken();
+    $token = MolloUtils::generateToken();
 
     $valid_email = \Drupal::service('email.validator')->isValid($email);
 
@@ -140,7 +140,7 @@ class MemberController extends ControllerBase
         }
 
         // Get Token
-        $output['token'] = Helper::getToken($entity);
+        $output['token'] = MolloUtils::getToken($entity);
         $output['status'] = true;
 
         if ($subscribe) {
@@ -209,7 +209,7 @@ class MemberController extends ControllerBase
       try {
         // Load List for origin
         $vid = 'smmg_origin';
-        $origin_list = Helper::getTermsByName($vid);
+        $origin_list = MolloUtils::getTermsByName($vid);
 
         $storage = \Drupal::entityTypeManager()->getStorage('node');
         $new_member = $storage->create([
@@ -223,7 +223,7 @@ class MemberController extends ControllerBase
           'field_zip_code' => $zip_code,
           'field_city' => $city,
           'field_email' => $email,
-          'field_smmg_token' => $token,
+          'field_mollo_token' => $token,
           'field_smmg_origin' => $origin_list['member'],
 
           // Member
@@ -342,7 +342,7 @@ class MemberController extends ControllerBase
     $nid = intval($nid);
 
     // Load Terms from Taxonomy
-    $gender_list = Helper::getTermsByID('smmg_gender');
+    $gender_list = MolloUtils::getTermsByID('smmg_gender');
 
     // Member & Member
     if ($nid) {
@@ -350,46 +350,46 @@ class MemberController extends ControllerBase
 
       if ($member && $member->bundle() == 'member') {
         // Check Token
-        $node_token = Helper::getFieldValue($member, 'smmg_token');
+        $node_token = MolloUtils::getFieldValue($member, 'mollo_token');
 
         if ($token != $node_token) {
           throw new AccessDeniedHttpException();
         }
 
         // Address
-        $variables['address']['gender'] = Helper::getFieldValue(
+        $variables['address']['gender'] = MolloUtils::getFieldValue(
           $member,
           'gender',
           $gender_list
         );
-        $variables['address']['first_name'] = Helper::getFieldValue(
+        $variables['address']['first_name'] = MolloUtils::getFieldValue(
           $member,
           'first_name'
         );
-        $variables['address']['last_name'] = Helper::getFieldValue(
+        $variables['address']['last_name'] = MolloUtils::getFieldValue(
           $member,
           'last_name'
         );
-        $variables['address']['street_and_number'] = Helper::getFieldValue(
+        $variables['address']['street_and_number'] = MolloUtils::getFieldValue(
           $member,
           'street_and_number'
         );
-        $variables['address']['zip_code'] = Helper::getFieldValue(
+        $variables['address']['zip_code'] = MolloUtils::getFieldValue(
           $member,
           'zip_code'
         );
-        $variables['address']['city'] = Helper::getFieldValue($member, 'city');
-        $variables['address']['email'] = Helper::getFieldValue(
+        $variables['address']['city'] = MolloUtils::getFieldValue($member, 'city');
+        $variables['address']['email'] = MolloUtils::getFieldValue(
           $member,
           'email'
         );
-        $variables['address']['phone'] = Helper::getFieldValue(
+        $variables['address']['phone'] = MolloUtils::getFieldValue(
           $member,
           'phone'
         );
 
         // Member
-        $variables['member'] = Helper::getFieldValue(
+        $variables['member'] = MolloUtils::getFieldValue(
           $member,
           'smmg_accept_member'
         );
@@ -471,7 +471,7 @@ class MemberController extends ControllerBase
   {
     $module = 'smmg_member';
     $template_names = self::getTemplateNames();
-    $templates = Helper::getTemplates($module, $template_names);
+    $templates = MolloUtils::getTemplates($module, $template_names);
 
     return $templates;
   }
@@ -649,11 +649,11 @@ class MemberController extends ControllerBase
 
     // get Group of message:
     $node_message = Node::load($message_id);
-    $groups = Helper::getFieldValue(
+    $groups = MolloUtils::getFieldValue(
       $node_message,
       Member::field_subscriber_group
     );
-    $groupNames = Helper::getFieldValue(
+    $groupNames = MolloUtils::getFieldValue(
       $node_message,
       Member::field_subscriber_group,
       'smmg_subscriber_group',
@@ -683,7 +683,7 @@ class MemberController extends ControllerBase
       if (!empty($node)) {
         $alter['title'] = $node->label();
         $alter['groups'] = $groupNames;
-        $telemetry = Helper::getFieldValue($node, Member::field_telemetry);
+        $telemetry = MolloUtils::getFieldValue($node, Member::field_telemetry);
 
         if ($telemetry) {
           $old_telemetry = json_decode($telemetry, true);
